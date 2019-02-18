@@ -1,7 +1,7 @@
 {
-  "name": "express-skeleton-2",
-  "version": "2.0.0",
-  "description": "A starter template for Express JS apps, with sane defaults",
+  "name": "recruitech-service",
+  "version": "1.0.0",
+  "description": "REST API for Recruitech",
   "engines": {
     "node": ">=10"
   },
