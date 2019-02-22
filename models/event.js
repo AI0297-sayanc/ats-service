@@ -6,7 +6,10 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: String,
+  description: {
+    type: String,
+    required: true
+  },
   location: String,
   start: Date,
   end: Date,
@@ -23,6 +26,16 @@ const EventSchema = new mongoose.Schema({
   _organization: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Organization"
+  },
+
+  _opening: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Opening"
+  },
+
+  _workflowStage: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WorkflowStage"
   },
 
 })

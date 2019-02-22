@@ -30,7 +30,7 @@ const TagSchema = new mongoose.Schema({
 
   _createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Tag"
+    ref: "User"
   },
 
   createdAt: {
@@ -45,20 +45,23 @@ const TagSchema = new mongoose.Schema({
 
 })
 
+TagSchema.index({ text: 1, type: 1 })
+
 TagSchema.set("toJSON", { virtuals: true })
 TagSchema.set("toObject", { virtuals: true })
 
-TagSchema.set("discriminatorKey", "type")
-
-TagSchema.statics.batchUpsert = async function (data) {
-  const writeQueries = data.map(doc => ({
+TagSchema.statics.batchUpsert = async function (type, tagStrings = []) {
+  const writeQueries = tagStrings.map(text => ({
     updateOne: {
-      filter: { text: doc.text, type: doc.type },
-      update: doc,
-      upsert: true
+      filter: { text, type }, // this combo will be unique ("compound index")
+      update: { text, type }, // if matched, basically replace by itself, i.e. no modif
+      upsert: true // else, create a new doc
     }
   }))
-  await this.bulkWrite(writeQueries)
+  const res = await this.bulkWrite(writeQueries)
+  console.log('***************', res);
+  const tags = await this.find({ text: { $in: tagStrings }, type }).select("_id").lean().exec()
+  return tags.map(t => t._id)
 }
 
 module.exports = mongoose.model("Tag", TagSchema)

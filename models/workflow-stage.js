@@ -4,7 +4,8 @@ const WorkflowStageSchema = new mongoose.Schema({
 
   _opening: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Opening"
+    ref: "Opening",
+    required: true
   },
 
   _organization: { // redundancy
@@ -19,7 +20,7 @@ const WorkflowStageSchema = new mongoose.Schema({
 
   type: {
     type: String,
-    enum: ["intro", "interview", "phone"]
+    enum: ["screening", "remote", "onsite"]
   },
 
   sortOrder: {

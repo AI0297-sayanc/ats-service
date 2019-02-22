@@ -7,6 +7,11 @@ const CandidateSchema = new mongoose.Schema({
     ref: "Organization"
   },
 
+  _opening: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Opening",
+  },
+
   _createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
