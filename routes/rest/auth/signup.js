@@ -2,6 +2,7 @@ const randomstring = require("randomstring")
 const mailer = require("../../../lib/mail")
 
 const User = require("../../../models/user")
+const Org = require("../../../models/organization")
 
 module.exports = {
   async post(req, res) {
@@ -9,20 +10,34 @@ module.exports = {
       const {
         email,
         phone,
-        name
+        name,
+        purpose,
+        role,
+        website,
+        location,
+        organization
       } = req.body
       if (email === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field `email`" })
+      if (organization === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field `organization`" })
       if (name === undefined || name.first === undefined) return res.status(400).json({ error: true, reason: "Please specify First Name!" })
       const password = (req.body.password !== undefined)
         ? req.body.password
         : randomstring.generate(8) // auto-generated plaintext pass
-      const user = await User.create({
+      const org = await Org.create({ name: organization })
+      let user = await User.create({
         email,
         phone,
         password,
-        name
+        name,
+        purpose,
+        role,
+        website,
+        location,
+        _organization: org._id
       })
+      user = user.toObject()
       delete user.password
+      delete user.forgotpassword
       // Send welcome email, but NO WAITING!
       mailer("welcome", {
         to: email,
