@@ -9,7 +9,7 @@ module.exports = {
    * @api {get} /openings 1.0 Fetch all the Openings
    * @apiName fetchOpenings
    * @apiGroup Opening
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -33,7 +33,7 @@ module.exports = {
    * @api {get} /opening/:id 2.0 Find a Opening by _id
    * @apiName getOpening
    * @apiGroup Opening
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -59,7 +59,7 @@ module.exports = {
    * @api {post} /opening 3.0 Create a new Opening
    * @apiName createOpening
    * @apiGroup Opening
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -111,7 +111,7 @@ module.exports = {
    * @api {put} /opening/:id 4.0 Edit a Opening by _id
    * @apiName editOpening
    * @apiGroup Opening
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -183,7 +183,7 @@ module.exports = {
    * @api {delete} /opening/:id 4.0 Delete a Opening by _id
    * @apiName deleteOpening
    * @apiGroup Opening
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *

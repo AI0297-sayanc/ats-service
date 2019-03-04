@@ -8,7 +8,7 @@ module.exports = {
    * @api {get} /workflowStages 1.0 Fetch all the WorkflowStages
    * @apiName fetchWorkflowStages
    * @apiGroup WorkflowStage
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -32,7 +32,7 @@ module.exports = {
    * @api {get} /workflowStage/:id 2.0 Find a WorkflowStage by _id
    * @apiName getWorkflowStage
    * @apiGroup WorkflowStage
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -58,7 +58,7 @@ module.exports = {
    * @api {post} /workflowStage 3.0 Create a new WorkflowStage
    * @apiName createWorkflowStage
    * @apiGroup WorkflowStage
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -92,7 +92,7 @@ module.exports = {
    * @api {put} /workflowStage/:id 4.0 Edit a WorkflowStage by _id
    * @apiName editWorkflowStage
    * @apiGroup WorkflowStage
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -133,7 +133,7 @@ module.exports = {
    * @api {delete} /workflowStage/:id 4.0 Delete a WorkflowStage by _id
    * @apiName deleteWorkflowStage
    * @apiGroup WorkflowStage
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *

@@ -5,6 +5,33 @@ const User = require("../../../models/user")
 const Org = require("../../../models/organization")
 
 module.exports = {
+  /**
+  * User signup
+  * @api {post} /signup 1. User signup
+  * @apiName signup
+  * @apiGroup Auth
+  * @apiPermission Public
+  *
+  * @apiParam {String} email User email
+  * @apiParam {String} organization Organization Name
+  * @apiParam {Object} name User name
+  * @apiParam {String} name.first User first name
+  * @apiParam {String} [name.last] User last name
+  * @apiParam {String} [password] User password (plaintext). If not specified, one will be randomly generated & emailed
+  * @apiParam {String} [phone] User phone
+  * @apiParam {String} [purpose] Purpose
+  * @apiParam {String} [role] User Role
+  * @apiParam {String} [website] Website
+  * @apiParam {Object} [location] Location
+  * @apiParam {String} [location.city] Location City
+  * @apiParam {String} [location.country] Location Country
+  *
+  * @apiSuccessExample {type} Success-Response: 200 OK
+  * {
+  *     error : false,
+  *     user: {}
+  * }
+  */
   async post(req, res) {
     try {
       const {

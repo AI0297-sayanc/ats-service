@@ -8,7 +8,7 @@ module.exports = {
    * @api {get} /candidates 1.0 Fetch all the Candidates
    * @apiName fetchCandidates
    * @apiGroup Candidate
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -32,7 +32,7 @@ module.exports = {
    * @api {get} /candidate/:id 2.0 Find a Candidate by _id
    * @apiName getCandidate
    * @apiGroup Candidate
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -58,7 +58,7 @@ module.exports = {
    * @api {post} /candidate 3.0 Create a new Candidate
    * @apiName createCandidate
    * @apiGroup Candidate
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -117,7 +117,7 @@ module.exports = {
    * @api {put} /candidate/:id 4.0 Edit a Candidate by _id
    * @apiName editCandidate
    * @apiGroup Candidate
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -189,7 +189,7 @@ module.exports = {
    * @api {delete} /candidate/:id 4.0 Delete a Candidate by _id
    * @apiName deleteCandidate
    * @apiGroup Candidate
-   * @apiPermission Public
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *

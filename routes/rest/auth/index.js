@@ -3,10 +3,29 @@ const jwt = require("jsonwebtoken")
 const User = require("../../../models/user")
 
 module.exports = {
+  /**
+  * @api {POST} /login 2. Authenticate an user and get a JWT on success
+  * @apiName Login
+  * @apiGroup Auth
+  * @apiVersion  1.0.0
+  * @apiPermission Public
+  *
+  * @apiParam  {String} handle User email/mobile to login with
+  * @apiParam  {String} password User password (plaintext)
+  * @apiParam  {String} [expiry=720] Life of the JWT in hours
+  *
+  * @apiSuccessExample {JSON} Success-Response: 200 OK
+  *    {
+        error: false,
+        isAdmin: false,
+        handle: 'foo@bar.com',
+        token: 'XXX.YYYYY.ZZZZZZZ'
+      }
+  */
   async post(req, res) {
     try {
       // const { type } = req.params
-      const { handle, password } = req.body
+      const { handle, password, expiry } = req.body
       if (handle === undefined || password === undefined) {
         return res.status(400).json({ error: true, reason: "Fields `handle` and `password` are mandatory" })
       }
@@ -26,8 +45,11 @@ module.exports = {
         phone: user.phone,
         _organization: user._organization
       }
+      const expiresInHours = (expiry === undefined || expiry === null || Number(expiry) === 0)
+        ? 24 * 30 // 1 month (default)
+        : expiry
       const token = jwt.sign(payload, process.env.SECRET, {
-        expiresIn: 3600 * 24 * 30 // 1 month
+        expiresIn: 3600 * expiresInHours
       })
       return res.json({ error: false, handle, token })
     } catch (err) {

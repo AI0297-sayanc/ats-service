@@ -6,6 +6,15 @@ const mail = require("../../../lib/mail")
 const User = require("../../../models/user")
 
 module.exports = {
+  /**
+  * @api {POST} /forgotpassword 3. Start the change/forgot password workflow
+  * @apiName ForgotPassword
+  * @apiGroup Auth
+  * @apiVersion  1.0.0
+  * @apiPermission Public
+  *
+  * @apiParam  {String} handle The email or phone for whom the password will be changed
+   */
   async startWorkflow(req, res) {
     try {
       const { handle } = req.body
