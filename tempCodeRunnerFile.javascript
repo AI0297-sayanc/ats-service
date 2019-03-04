@@ -1,15 +1,12 @@
-/* eslint-disable */
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+function hello() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("hello...."), 5000)
+  })
+}
 
-const CatSchema = new mongoose.Schema({
-  naam: String,
-  dhaam: String,
-  boyesh: Number
-});
-const Cat = mongoose.model("Cat", CatSchema)
-// console.log(JSON.stringify(CatSchema.paths, null, 2));
-console.log(Object.values(Cat.schema.paths).map(p => ({ path: p.path, type: p.instance })));
+async function main() {
+  return await hello()
+  // console.log('=====', typeof x);
+}
 
-// const kitty = new Cat({ name: 'Zildjian' });
-// kitty.save().then(() => console.log('meow'));
+main().then(console.log)

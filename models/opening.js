@@ -87,13 +87,12 @@ const OpeningSchema = new mongoose.Schema({
     unique: true
   },
 
-  decisionStatus: {
-    type: String,
-    enum: ["pending", "rejected", "accepted"],
-    default: "pending"
-  },
-
   _skillsRequired: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tag"
+  }],
+
+  _tags: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tag"
   }],
@@ -118,18 +117,6 @@ const OpeningSchema = new mongoose.Schema({
     default: Date.now
   },
 
-  rejectedAt: {
-    type: Date,
-    default: null
-  },
-
-  rejectionReason: String,
-
-  acceptedAt: {
-    type: Date,
-    default: null
-  },
-
 })
 
 // eslint-disable-next-line prefer-arrow-callback
@@ -141,23 +128,15 @@ OpeningSchema.virtual("_candidates", {
 })
 
 // eslint-disable-next-line prefer-arrow-callback
-OpeningSchema.virtual("_tags", {
-  ref: "OpeningTag", // The model to use
+OpeningSchema.virtual("_workflowStages", {
+  ref: "WorkflowStage", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "_opening", // is equal to `foreignField` (will it work with an array????)
   justOne: false
 })
 
-OpeningSchema.pre("save", async function (next) {
-  const now = Date.now()
-  if (!this.isNew && this.isModified("decisionStatus")) {
-    if (this.decisionStatus === "rejected") {
-      this.rejectedAt = now
-    } else if (this.decisionStatus === "accepted") {
-      this.acceptedAt = now
-    }
-  }
-  this.lastModifiedAt = now
+OpeningSchema.pre("save", function (next) {
+  this.lastModifiedAt = Date.now()
   return next()
 })
 

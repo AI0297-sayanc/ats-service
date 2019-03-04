@@ -51,15 +51,18 @@ TagSchema.set("toJSON", { virtuals: true })
 TagSchema.set("toObject", { virtuals: true })
 
 TagSchema.statics.batchUpsert = async function (type, tagStrings = []) {
-  const writeQueries = tagStrings.map(text => ({
-    updateOne: {
-      filter: { text, type }, // this combo will be unique ("compound index")
-      update: { text, type }, // if matched, basically replace by itself, i.e. no modif
-      upsert: true // else, create a new doc
-    }
-  }))
-  const res = await this.bulkWrite(writeQueries)
-  console.log('***************', res);
+  if (tagStrings.length > 0) {
+    const writeQueries = tagStrings.map(text => ({
+      updateOne: {
+        filter: { text, type }, // this combo will be unique ("compound index")
+        update: { text, type }, // if matched, basically replace by itself, i.e. no modif
+        upsert: true // else, create a new doc
+      }
+    }))
+    await this.bulkWrite(writeQueries)
+  }
+  // console.log('***************', res);
+  // Idempotence if no tagStrings are supplied
   const tags = await this.find({ text: { $in: tagStrings }, type }).select("_id").lean().exec()
   return tags.map(t => t._id)
 }

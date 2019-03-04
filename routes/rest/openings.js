@@ -71,6 +71,7 @@ module.exports = {
    * @apiParam  {String} [positionType=fulltime] Opening positionType `enum=["fulltime", "contract", "freelance", "internship"]`
    * @apiParam  {String} [jobFunction] Opening jobFunction `enum=["HR", "Marketing", "IT", "Finance"]`
    * @apiParam  {String[]} [skillsRequired] Array of skills required
+   * @apiParam  {String[]} [tags] Array of tags
    * @apiParam  {Number} [minExpRequired] Opening minExpRequired
    * @apiParam  {Number} [maxExpRequired] Opening maxExpRequired
    * @apiParam  {Number} [minCompensation] Opening minCompensation
@@ -79,8 +80,6 @@ module.exports = {
    * @apiParam  {String} [minEducationalQualification] Opening minEducationalQualification
    * @apiParam  {String} [jobLevel] Opening jobLevel `enum=["Entry", "Associate", "Middle", "Senior", "Director & Above"]`
    * @apiParam  {String} [jobCode] Opening jobCode
-   * @apiParam  {String} [decisionStatus=pending] Opening decisionStatus `enum=["pending", "rejected", "accepted"]`
-   * @apiParam  {String} [rejectionReason] Opening rejectionReason
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -91,12 +90,15 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, decisionStatus, rejectionReason, skillsRequired
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags
       } = req.body
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })
-      const _skillsRequired = await Tag.batchUpsert("skill", skillsRequired)
+      const [_skillsRequired, _tags] = await Promise.all([
+        Tag.batchUpsert("skill", skillsRequired),
+        Tag.batchUpsert("opening", tags)
+      ])
       const opening = await Opening.create({
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, decisionStatus, rejectionReason, _skillsRequired, _organization: req.user._organization, _createdBy: req.user._id
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, _skillsRequired, _tags, _organization: req.user._organization, _createdBy: req.user._id
       })
       return res.json({ error: false, opening })
     } catch (err) {
@@ -122,6 +124,7 @@ module.exports = {
    * @apiParam  {String} [positionType=fulltime] Opening positionType `enum=["fulltime", "contract", "freelance", "internship"]`
    * @apiParam  {String} [jobFunction] Opening jobFunction `enum=["HR", "Marketing", "IT", "Finance"]`
    * @apiParam  {String[]} [skillsRequired] Array of skills required
+   * @apiParam  {String[]} [tags] Array of tags
    * @apiParam  {Number} [minExpRequired] Opening minExpRequired
    * @apiParam  {Number} [maxExpRequired] Opening maxExpRequired
    * @apiParam  {Number} [minCompensation] Opening minCompensation
@@ -130,8 +133,6 @@ module.exports = {
    * @apiParam  {String} [minEducationalQualification] Opening minEducationalQualification
    * @apiParam  {String} [jobLevel] Opening jobLevel `enum=["Entry", "Associate", "Middle", "Senior", "Director & Above"]`
    * @apiParam  {String} [jobCode] Opening jobCode
-   * @apiParam  {String} [decisionStatus=pending] Opening decisionStatus `enum=["pending", "rejected", "accepted"]`
-   * @apiParam  {String} [rejectionReason] Opening rejectionReason
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -142,7 +143,7 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, decisionStatus, rejectionReason, skillsRequired
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags
       } = req.body
       const opening = await Opening.findOne({ _id: req.params.id }).exec()
       if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening!" })
@@ -163,10 +164,11 @@ module.exports = {
       if (minEducationalQualification !== undefined) opening.minEducationalQualification = minEducationalQualification
       if (jobLevel !== undefined) opening.jobLevel = jobLevel
       if (jobCode !== undefined) opening.jobCode = jobCode
-      if (decisionStatus !== undefined) opening.decisionStatus = decisionStatus
-      if (rejectionReason !== undefined) opening.rejectionReason = rejectionReason
       if (skillsRequired !== undefined && Array.isArray(skillsRequired)) {
         opening._skillsRequired = await Tag.batchUpsert("skill", skillsRequired)
+      }
+      if (tags !== undefined && Array.isArray(tags)) {
+        opening._tags = await Tag.batchUpsert("opening", tags)
       }
 
       await opening.save()
