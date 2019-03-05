@@ -14,6 +14,16 @@ const ActivitySchema = new mongoose.Schema({
     ref: "Candidate"
   },
 
+  _opening: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Opening"
+  },
+
+  _organization: { // redundancy
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization"
+  },
+
   _workflowStage: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "WorkflowStage",

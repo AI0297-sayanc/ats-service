@@ -14,11 +14,13 @@ const users = require("./users")
 const openings = require("./openings")
 const events = require("./events")
 const workflowStages = require("./workflowStages")
+const tags = require("./tags")
 
 router.post("/login", login.post) // UNAUTHENTICATED
 router.post("/signup", signup.post) // UNAUTHENTICATED
 router.post("/forgotpassword", forgotpassword.startWorkflow) // UNAUTHENTICATED; AJAX
 router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; AJAX
+router.post("/tags/:type", tags.find) // UNAUTHENTICATED
 
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 

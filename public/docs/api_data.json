@@ -1387,7 +1387,6 @@
             "type": "Number",
             "optional": true,
             "field": "noOfOpenings",
-            "defaultValue": "1",
             "description": "<p>Opening noOfOpenings</p>"
           },
           {
@@ -1395,7 +1394,6 @@
             "type": "Boolean",
             "optional": true,
             "field": "isActive",
-            "defaultValue": "true",
             "description": "<p>Opening isActive</p>"
           },
           {
@@ -1403,7 +1401,6 @@
             "type": "Boolean",
             "optional": true,
             "field": "isRemoteAllowed",
-            "defaultValue": "false",
             "description": "<p>Opening isRemoteAllowed</p>"
           },
           {
@@ -1411,7 +1408,6 @@
             "type": "String",
             "optional": true,
             "field": "positionType",
-            "defaultValue": "fulltime",
             "description": "<p>Opening positionType <code>enum=[&quot;fulltime&quot;, &quot;contract&quot;, &quot;freelance&quot;, &quot;internship&quot;]</code></p>"
           },
           {
@@ -1468,7 +1464,6 @@
             "type": "Boolean",
             "optional": true,
             "field": "hideCompensationDetails",
-            "defaultValue": "false",
             "description": "<p>Opening hideCompensationDetails</p>"
           },
           {
@@ -1594,6 +1589,56 @@
     "version": "0.0.0",
     "filename": "routes/rest/openings.js",
     "groupTitle": "Opening"
+  },
+  {
+    "type": "get",
+    "url": "/tags/:type",
+    "title": "1.0 Fetch all the Tags (pan organization) of specified type",
+    "name": "fetchTags",
+    "group": "Tag",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>type</code> The type of tag <code>enum[&quot;skill&quot;, &quot;opening&quot;, &quot;candidate&quot;]</code></p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    users: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/tags.js",
+    "groupTitle": "Tag"
   },
   {
     "type": "post",

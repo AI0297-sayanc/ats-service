@@ -118,10 +118,10 @@ module.exports = {
    * @apiParam {String} id `URL Param` The _id of the Opening to edit
 
    * @apiParam  {String[]} [locations] Opening locations
-   * @apiParam  {Number} [noOfOpenings=1] Opening noOfOpenings
-   * @apiParam  {Boolean} [isActive=true] Opening isActive
-   * @apiParam  {Boolean} [isRemoteAllowed=false] Opening isRemoteAllowed
-   * @apiParam  {String} [positionType=fulltime] Opening positionType `enum=["fulltime", "contract", "freelance", "internship"]`
+   * @apiParam  {Number} [noOfOpenings] Opening noOfOpenings
+   * @apiParam  {Boolean} [isActive] Opening isActive
+   * @apiParam  {Boolean} [isRemoteAllowed] Opening isRemoteAllowed
+   * @apiParam  {String} [positionType] Opening positionType `enum=["fulltime", "contract", "freelance", "internship"]`
    * @apiParam  {String} [jobFunction] Opening jobFunction `enum=["HR", "Marketing", "IT", "Finance"]`
    * @apiParam  {String[]} [skillsRequired] Array of skills required
    * @apiParam  {String[]} [tags] Array of tags
@@ -129,7 +129,7 @@ module.exports = {
    * @apiParam  {Number} [maxExpRequired] Opening maxExpRequired
    * @apiParam  {Number} [minCompensation] Opening minCompensation
    * @apiParam  {Number} [maxCompensation] Opening maxCompensation
-   * @apiParam  {Boolean} [hideCompensationDetails=false] Opening hideCompensationDetails
+   * @apiParam  {Boolean} [hideCompensationDetails] Opening hideCompensationDetails
    * @apiParam  {String} [minEducationalQualification] Opening minEducationalQualification
    * @apiParam  {String} [jobLevel] Opening jobLevel `enum=["Entry", "Associate", "Middle", "Senior", "Director & Above"]`
    * @apiParam  {String} [jobCode] Opening jobCode
@@ -152,15 +152,15 @@ module.exports = {
       if (title !== undefined) opening.title = title
       if (locations !== undefined) opening.locations = locations
       if (noOfOpenings !== undefined) opening.noOfOpenings = noOfOpenings
-      if (isActive !== undefined) opening.isActive = isActive
-      if (isRemoteAllowed !== undefined) opening.isRemoteAllowed = isRemoteAllowed
+      if (isActive !== undefined && typeof isActive === "boolean") opening.isActive = isActive
+      if (isRemoteAllowed !== undefined && typeof isRemoteAllowed === "boolean") opening.isRemoteAllowed = isRemoteAllowed
       if (positionType !== undefined) opening.positionType = positionType
       if (jobFunction !== undefined) opening.jobFunction = jobFunction
       if (minExpRequired !== undefined) opening.minExpRequired = minExpRequired
       if (maxExpRequired !== undefined) opening.maxExpRequired = maxExpRequired
       if (minCompensation !== undefined) opening.minCompensation = minCompensation
       if (maxCompensation !== undefined) opening.maxCompensation = maxCompensation
-      if (hideCompensationDetails !== undefined) opening.hideCompensationDetails = hideCompensationDetails
+      if (hideCompensationDetails !== undefined && typeof hideCompensationDetails === "boolean") opening.hideCompensationDetails = hideCompensationDetails
       if (minEducationalQualification !== undefined) opening.minEducationalQualification = minEducationalQualification
       if (jobLevel !== undefined) opening.jobLevel = jobLevel
       if (jobCode !== undefined) opening.jobCode = jobCode
