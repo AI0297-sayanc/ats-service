@@ -3,6 +3,18 @@ const cuid = require("cuid")
 const Org = require("../../models/organization")
 
 module.exports = {
+  /**
+   * @api {GET} /widget/openings/:apikey Get all openings for an organization by widget api key
+   * @apiName getOpenings
+   * @apiGroup Widget
+   * @apiPermission Public
+   * @apiParam  {String} apikey Api key for the organization to find openings for `URL Param`
+   * @apiSuccessExample {type} Success-Response: 200 OK
+   * {
+   *     error : false,
+   *     openings: [{}]
+   * }
+   */
   async get(req, res) {
     try {
       const apiKey = req.params.apikey
@@ -23,6 +35,17 @@ module.exports = {
   //   }
   // },
 
+  /**
+  * @api {GET} /widget/organization/apikey Get the widget Api Key for your organization
+  * @apiName getApiKey
+  * @apiGroup Widget
+  * @apiPermission User
+  * @apiSuccessExample {type} Success-Response: 200 OK
+   * {
+   *     error : false,
+   *     apiKey: "cjxu21t3y00007ev20zqi63s6"
+   * }
+  */
   async getApiKey(req, res) {
     try {
       const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()
@@ -33,6 +56,17 @@ module.exports = {
     }
   },
 
+  /**
+  * @api {PUT} /widget/organization/apikey Regenerate the widget Api Key for your organization
+  * @apiName regenerateApiKey
+  * @apiGroup Widget
+  * @apiPermission User
+  * @apiSuccessExample {type} Success-Response: 200 OK
+  * {
+  *     error : false,
+  *     apiKey: "cjxu21t3y00007ev20zqi63s6"
+  * }
+  */
   async put(req, res) {
     try {
       const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()
@@ -45,7 +79,18 @@ module.exports = {
     }
   },
 
-
+  /**
+  * @api {GET} /widget/organization/code Get embeddable/shareable script code for your organization
+  * @apiName getCode
+  * @apiGroup Widget
+  * @apiPermission User
+  * @apiSuccessExample {type} Success-Response: 200 OK
+  * {
+  *     error : false,
+  *     apiKey: "cjxu21t3y00007ev20zqi63s6",
+  *     script: ""
+  * }
+  */
   async getWidgetCode(req, res) {
     try {
       const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()

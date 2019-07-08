@@ -1899,6 +1899,115 @@
     "groupTitle": "User"
   },
   {
+    "type": "GET",
+    "url": "/widget/organization/apikey",
+    "title": "Get the widget Api Key for your organization",
+    "name": "getApiKey",
+    "group": "Widget",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    apiKey: \"cjxu21t3y00007ev20zqi63s6\"\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/widgets.js",
+    "groupTitle": "Widget"
+  },
+  {
+    "type": "GET",
+    "url": "/widget/organization/code",
+    "title": "Get embeddable/shareable script code for your organization",
+    "name": "getCode",
+    "group": "Widget",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    apiKey: \"cjxu21t3y00007ev20zqi63s6\",\n    script: \"\"\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/widgets.js",
+    "groupTitle": "Widget"
+  },
+  {
+    "type": "GET",
+    "url": "/widget/openings/:apikey",
+    "title": "Get all openings for an organization by widget api key",
+    "name": "getOpenings",
+    "group": "Widget",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "apikey",
+            "description": "<p>Api key for the organization to find openings for <code>URL Param</code></p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    openings: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/widgets.js",
+    "groupTitle": "Widget"
+  },
+  {
+    "type": "PUT",
+    "url": "/widget/organization/apikey",
+    "title": "Regenerate the widget Api Key for your organization",
+    "name": "regenerateApiKey",
+    "group": "Widget",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    apiKey: \"cjxu21t3y00007ev20zqi63s6\"\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/widgets.js",
+    "groupTitle": "Widget"
+  },
+  {
     "type": "post",
     "url": "/workflowStage",
     "title": "3.0 Create a new WorkflowStage",
