@@ -59,6 +59,6 @@ router.get("/widget/organization/apikey", widgets.getApiKey)
 router.get("/widget/organization/code", widgets.getWidgetCode)
 
 router.post("/message/send", messages.post)
-router.get("/messages/:threadid?", messages.get)
+router.get("/messages", messages.get)
 
 module.exports = router
