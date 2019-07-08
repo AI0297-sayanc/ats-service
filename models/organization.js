@@ -1,10 +1,14 @@
 const mongoose = require("mongoose")
+const cuid = require("cuid")
 
 const OrganizationSchema = new mongoose.Schema({
 
-  name: {
+  title: String,
+
+  widgetApiKey: {
     type: String,
-    required: true
+    default: cuid,
+    unique: true
   },
 
   createdAt: {
@@ -16,6 +20,13 @@ const OrganizationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+})
+
+OrganizationSchema.virtual("_openings", {
+  ref: "Opening", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "_organization", // is equal to `foreignField` (will it work with an array????)
+  justOne: false
 })
 
 OrganizationSchema.set("toJSON", { virtuals: true })

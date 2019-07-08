@@ -15,12 +15,15 @@ const openings = require("./openings")
 const events = require("./events")
 const workflowStages = require("./workflowStages")
 const tags = require("./tags")
+const widgets = require("./widgets")
 
 router.post("/login", login.post) // UNAUTHENTICATED
 router.post("/signup", signup.post) // UNAUTHENTICATED
 router.post("/forgotpassword", forgotpassword.startWorkflow) // UNAUTHENTICATED; AJAX
 router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; AJAX
 router.post("/tags/:type", tags.find) // UNAUTHENTICATED
+router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
+// router.post("/widget/apply", widgets.post) // UNAUTHENTICATED
 
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 
@@ -47,5 +50,9 @@ router.get("/workflowStage/:id", workflowStages.get)
 router.post("/workflowStage", workflowStages.post)
 router.put("/workflowStage/:id", workflowStages.put)
 router.delete("/workflowStage/:id", workflowStages.delete)
+
+router.put("/widget/organization/apikey", widgets.put)
+router.get("/widget/organization/apikey", widgets.getApiKey)
+router.get("/widget/organization/code", widgets.getWidgetCode)
 
 module.exports = router
