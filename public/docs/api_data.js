@@ -1125,6 +1125,51 @@ define({ "api": [
     "groupTitle": "Event"
   },
   {
+    "type": "GET",
+    "url": "/messages",
+    "title": "Get list of all email messages to a candidate, grouped by threads",
+    "name": "getMessages",
+    "group": "Messages",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of the candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "showMyMailsOnly",
+            "defaultValue": "false",
+            "description": "<p>Optionally filter to show emails sent by current user only</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    threads: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/messages.js",
+    "groupTitle": "Messages"
+  },
+  {
     "type": "POST",
     "url": "/message/send",
     "title": "Send a message to a candidate.",
@@ -1149,8 +1194,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "to",
-            "description": "<p>Email address of candidate</p>"
+            "field": "candidateId",
+            "description": "<p>_id of candidate</p>"
           },
           {
             "group": "Parameter",
@@ -1174,43 +1219,6 @@ define({ "api": [
         {
           "title": "Success-Response: 200 OK",
           "content": "{\n    error : false\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/messages.js",
-    "groupTitle": "Messages"
-  },
-  {
-    "type": "GET",
-    "url": "/messages/:threadid?",
-    "title": "Get list of email messages, grouped by threads",
-    "name": "sendMessage",
-    "group": "Messages",
-    "permission": [
-      {
-        "name": "User"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "threadid",
-            "description": "<p>Optionally restrict messages to those belonging to a certain thread. <code>URL Param</code></p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    threads: [{}]\n}",
           "type": "type"
         }
       ]

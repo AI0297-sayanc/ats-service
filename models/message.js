@@ -12,7 +12,21 @@ const MessageSchema = new mongoose.Schema({
   isQueuedWithMg: { type: Boolean },
   createdAt: { type: Date, default: Date.now },
   isOpened: { type: Boolean },
-  openedAt: { type: Date }
+  openedAt: { type: Date },
+
+  _organization: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization"
+  },
+  _candidate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Candidate"
+  },
+  _sender: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+
 })
 
 MessageSchema.set("toJSON", { virtuals: true })

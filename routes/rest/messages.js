@@ -1,5 +1,6 @@
 const Mailgun = require("mailgun-js")
 
+const Candidate = require("../../models/candidate")
 const Mail = require("../../models/message")
 
 const mailgun = Mailgun({
@@ -14,8 +15,8 @@ module.exports = {
   * @apiGroup Messages
   * @apiPermission User
   * @apiParam  {String} subject Mail Subject
-  * @apiParam  {String} to Email address of candidate
-  * @apiParam  {String} subject Mail Subject. Might be overriden in case of replying.
+  * @apiParam  {String} candidateId _id of candidate
+  * @apiParam  {String} subject Mail Subject. Might be overwritten in case of replying.
   * @apiParam  {String} html The html body of the email message
   * @apiParam  {String} [replyToMsgId] Mailgun message ID to reply to. If specified, implies that this is continuation of an existing message thread.
   * @apiSuccessExample {type} Success-Response: 200 OK
@@ -24,11 +25,16 @@ module.exports = {
   * }
   */
   async post(req, res) {
+    if (req.body.candidateId === undefined || req.body.html === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory fields 'candidateId' or 'html'" })
     const data = {}
     try {
-      data.from = `Recruitech LS<${process.env.MAILGUN_EMAIL_FROM}>`
-      data.to = req.body.to
-      data.subject = req.body.subject // might be overriden below (in case of replying)
+      const candidate = await Candidate.findOne({ _id: req.body.candidateId }).exec()
+      if (candidate === null) return res.status(400).json({ error: true, reason: "No such candidate!" })
+
+      // data.from = `Recruitech LS<${process.env.MAILGUN_EMAIL_FROM}>`
+      data.from = `${req.user.name.full} <${req.user.email}>`
+      data.to = candidate.email
+      data.subject = req.body.subject || "No Subject" // might be overriden below (in case of replying)
       data.html = req.body.html || req.body.text || req.body.content || req.body.body
       data.isOpened = false
       if (req.body.replyToMsgId !== undefined) { // exisiting thread (replying)
@@ -42,7 +48,7 @@ module.exports = {
         data.threadId = threadId // for DB only
       }
       try {
-        data["h:Reply-To"] = process.env.MAILGUN_EMAIL_FROM // for mailing only
+        data["h:Reply-To"] = req.user.email // process.env.MAILGUN_EMAIL_FROM // for mailing only
         data["o:tracking-opens"] = "yes" // for mailing only
         const sentMail = await mailgun.messages().send(data)
         data.isQueuedWithMg = true
@@ -52,6 +58,9 @@ module.exports = {
         data.isQueuedWithMg = false
         data.mgMsgId = null
       }
+      data._organization = req.user._organization
+      data._candidate = req.body.candidateId
+      data._sender = req.user.id
       await Mail.create(data)
       return res.json({ error: false })
     } catch (error) {
@@ -115,11 +124,12 @@ module.exports = {
   },
 
   /**
-  * @api {GET} /messages/:threadid? Get list of email messages, grouped by threads
-  * @apiName sendMessage
+  * @api {GET} /messages Get list of all email messages to a candidate, grouped by threads
+  * @apiName getMessages
   * @apiGroup Messages
   * @apiPermission User
-  * @apiParam  {String} [threadid] Optionally restrict messages to those belonging to a certain thread. `URL Param`
+  * @apiParam  {String} candidateId _id of the candidate
+  * @apiParam  {Boolean} [showMyMailsOnly=false] Optionally filter to show emails sent by current user only
   * @apiSuccessExample {type} Success-Response: 200 OK
   * {
   *     error : false,
@@ -127,19 +137,25 @@ module.exports = {
   * }
   */
   async get(req, res) {
-    const stages = [
-      { $sort: { createdAt: 1 } },
-      {
-        $group: {
-          _id: "$threadId",
-          messages: { $push: "$$ROOT" },
-          messagesCount: { $sum: 1 }
+    if (req.body.candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'candidateId'" })
+    try {
+      const matcher = { _organization: req.user._organization, _candidate: req.body.candidateId }
+      if (req.body.showMyMailsOnly === true) matcher._sender = req.user.id
+      const threads = await Mail.aggregate([
+        matcher,
+        { $sort: { createdAt: 1 } },
+        {
+          $group: {
+            _id: "$threadId",
+            messages: { $push: "$$ROOT" },
+            messagesCount: { $sum: 1 }
+          }
         }
-      }
-    ]
-    if (req.params.threadid !== undefined) stages.unshift({ $match: { threadId: req.params.threadid } })
-    const threads = await Mail.aggregate(stages).exec()
-    return res.json({ error: false, threads })
+      ]).exec()
+      return res.json({ error: false, threads })
+    } catch (error) {
+      return res.status(500).json({ error: true, reason: error.message })
+    }
   }
 
 }
