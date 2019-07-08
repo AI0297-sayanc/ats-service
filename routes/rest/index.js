@@ -16,6 +16,7 @@ const events = require("./events")
 const workflowStages = require("./workflowStages")
 const tags = require("./tags")
 const widgets = require("./widgets")
+const messages = require("./messages")
 
 router.post("/login", login.post) // UNAUTHENTICATED
 router.post("/signup", signup.post) // UNAUTHENTICATED
@@ -24,6 +25,8 @@ router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; 
 router.post("/tags/:type", tags.find) // UNAUTHENTICATED
 router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
 // router.post("/widget/apply", widgets.post) // UNAUTHENTICATED
+router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Webhook Handler
+router.post("/webhook/message/opened", messages.opened) // UNAUTHENTICATED; Mailgun Webhook Handler
 
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 
@@ -54,5 +57,8 @@ router.delete("/workflowStage/:id", workflowStages.delete)
 router.put("/widget/organization/apikey", widgets.put)
 router.get("/widget/organization/apikey", widgets.getApiKey)
 router.get("/widget/organization/code", widgets.getWidgetCode)
+
+router.post("/message/send", messages.post)
+router.get("/messages/:threadid?", messages.get)
 
 module.exports = router

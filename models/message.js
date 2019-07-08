@@ -1,12 +1,18 @@
 const mongoose = require("mongoose")
+const cuid = require("cuid")
 
 const MessageSchema = new mongoose.Schema({
-
-  _organization: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Organization"
-  },
-
+  mgMsgId: { type: String, required: true, default: null }, // mailgun msg id
+  from: { type: String, required: true },
+  to: { type: String, required: true },
+  subject: { type: String },
+  html: { type: String, required: true },
+  replyToMsgId: { type: String, default: null },
+  threadId: { type: String, default: cuid },
+  isQueuedWithMg: { type: Boolean },
+  createdAt: { type: Date, default: Date.now },
+  isOpened: { type: Boolean },
+  openedAt: { type: Date }
 })
 
 MessageSchema.set("toJSON", { virtuals: true })

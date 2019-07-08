@@ -1125,6 +1125,101 @@ define({ "api": [
     "groupTitle": "Event"
   },
   {
+    "type": "POST",
+    "url": "/message/send",
+    "title": "Send a message to a candidate.",
+    "name": "sendMessage",
+    "group": "Messages",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>Mail Subject</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "to",
+            "description": "<p>Email address of candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "html",
+            "description": "<p>The html body of the email message</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "replyToMsgId",
+            "description": "<p>Mailgun message ID to reply to. If specified, implies that this is continuation of an existing message thread.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/messages.js",
+    "groupTitle": "Messages"
+  },
+  {
+    "type": "GET",
+    "url": "/messages/:threadid?",
+    "title": "Get list of email messages, grouped by threads",
+    "name": "sendMessage",
+    "group": "Messages",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "threadid",
+            "description": "<p>Optionally restrict messages to those belonging to a certain thread. <code>URL Param</code></p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    threads: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/messages.js",
+    "groupTitle": "Messages"
+  },
+  {
     "type": "post",
     "url": "/opening",
     "title": "3.0 Create a new Opening",
