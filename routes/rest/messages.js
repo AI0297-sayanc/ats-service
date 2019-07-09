@@ -60,7 +60,7 @@ module.exports = {
       }
       data._organization = req.user._organization
       data._candidate = req.body.candidateId
-      data._sender = req.user.id
+      data._user = req.user.id
       await Mail.create(data)
       return res.json({ error: false })
     } catch (error) {
@@ -86,9 +86,14 @@ module.exports = {
     data.html = body["body-html"]
     try {
       // eslint-disable-next-line newline-per-chained-call
-      const { threadId, from } = await Mail.findOne({ mgMsgId: data.replyToMsgId }).select("threadId from").lean().exec()
+      const {
+        threadId, from, _organization, _candidate, _user
+      } = await Mail.findOne({ mgMsgId: data.replyToMsgId }).lean().exec()
       data.to = from
       data.threadId = threadId
+      data._organization = _organization
+      data._candidate = _candidate
+      data._user = _user
       await Mail.create(data)
     } catch (error) {
       console.log(error)
@@ -140,7 +145,7 @@ module.exports = {
     if (req.body.candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'candidateId'" })
     try {
       const matcher = { _organization: req.user._organization, _candidate: req.body.candidateId }
-      if (req.body.showMyMailsOnly === true) matcher._sender = req.user.id
+      if (req.body.showMyMailsOnly === true) matcher._user = req.user.id
       const threads = await Mail.aggregate([
         matcher,
         { $sort: { createdAt: 1 } },

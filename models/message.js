@@ -22,7 +22,7 @@ const MessageSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Candidate"
   },
-  _sender: {
+  _user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
