@@ -20,7 +20,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const workflowStages = await WorkflowStage.find({}).exec()
+      const workflowStages = await WorkflowStage.find({ _organization: req.user.organization }).exec()
       return res.json({ error: false, workflowStages })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -46,7 +46,8 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id }).exec()
+      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user.organization }).exec()
+      if (workflowStage === null) throw new Error("No such workflowstage for you!")
       return res.json({ error: false, workflowStage })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -64,7 +65,6 @@ module.exports = {
    *
    * @apiParam  {String} text WorkflowStage text
    * @apiParam  {String} [type] WorkflowStage type `enum=["screening", "remote", "onsite"]`
-   * @apiParam  {Number} [sortOrder] WorkflowStage sortOrder
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -75,11 +75,11 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        text, type, sortOrder
+        text, type
       } = req.body
       if (text === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'text'" })
       const workflowStage = await WorkflowStage.create({
-        text, type, sortOrder
+        text, type, _organization: req.user.organization
       })
       return res.json({ error: false, workflowStage })
     } catch (err) {
@@ -98,10 +98,8 @@ module.exports = {
    *
    * @apiParam {String} id `URL Param` The _id of the WorkflowStage to edit
 
+   * @apiParam  {String} [text] WorkflowStage text
    * @apiParam  {String} [type] WorkflowStage type `enum=["screening", "remote", "onsite"]`
-   * @apiParam  {Number} [sortOrder] WorkflowStage sortOrder
-   * @apiParam  {Date} [createdAt] WorkflowStage createdAt
-   * @apiParam  {Date} [lastModifiedAt] WorkflowStage lastModifiedAt
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -112,14 +110,13 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        text, type, sortOrder
+        text, type
       } = req.body
-      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id }).exec()
-      if (workflowStage === null) return res.status(400).json({ error: true, reason: "No such WorkflowStage!" })
+      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user.organization }).exec()
+      if (workflowStage === null) return res.status(400).json({ error: true, reason: "No such WorkflowStage for you!" })
 
       if (text !== undefined) workflowStage.text = text
       if (type !== undefined) workflowStage.type = type
-      if (sortOrder !== undefined) workflowStage.sortOrder = sortOrder
 
       await workflowStage.save()
       return res.json({ error: false, workflowStage })
@@ -146,7 +143,7 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await WorkflowStage.deleteOne({ _id: req.params.id })
+      await WorkflowStage.deleteOne({ _id: req.params.id, _organization: req.user.organization }).exec()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

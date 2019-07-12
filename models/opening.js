@@ -97,9 +97,15 @@ const OpeningSchema = new mongoose.Schema({
     ref: "Tag"
   }],
 
+  _workflowStages: [{ // in desired order
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WorkflowStage"
+  }],
+
   _organization: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Organization"
+    ref: "Organization",
+    required: true
   },
 
   _createdBy: {
@@ -128,12 +134,12 @@ OpeningSchema.virtual("_candidates", {
 })
 
 // eslint-disable-next-line prefer-arrow-callback
-OpeningSchema.virtual("_workflowStages", {
-  ref: "WorkflowStage", // The model to use
-  localField: "_id", // Find people where `localField`
-  foreignField: "_opening", // is equal to `foreignField` (will it work with an array????)
-  justOne: false
-})
+// OpeningSchema.virtual("_workflowStages", {
+//   ref: "WorkflowStage", // The model to use
+//   localField: "_id", // Find people where `localField`
+//   foreignField: "_opening", // is equal to `foreignField` (will it work with an array????)
+//   justOne: false
+// })
 
 OpeningSchema.pre("save", function (next) {
   this.lastModifiedAt = Date.now()

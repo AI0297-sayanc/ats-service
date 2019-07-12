@@ -1264,6 +1264,13 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "String[]",
+            "optional": false,
+            "field": "workflowStages",
+            "description": "<p>Array of workflow stage Ids in desired order. Must have at least one element.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
             "optional": true,
             "field": "locations",
             "description": "<p>Opening locations</p>"
@@ -1477,6 +1484,13 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p><code>URL Param</code> The _id of the Opening to edit</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": true,
+            "field": "workflowStages",
+            "description": "<p>Array of workflow stage Ids in desired order. Note that setting this field OVERWRITES existing array completely.</p>"
           },
           {
             "group": "Parameter",
@@ -2150,13 +2164,6 @@ define({ "api": [
             "optional": true,
             "field": "type",
             "description": "<p>WorkflowStage type <code>enum=[&quot;screening&quot;, &quot;remote&quot;, &quot;onsite&quot;]</code></p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "sortOrder",
-            "description": "<p>WorkflowStage sortOrder</p>"
           }
         ]
       }
@@ -2262,29 +2269,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": true,
+            "field": "text",
+            "description": "<p>WorkflowStage text</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
             "field": "type",
             "description": "<p>WorkflowStage type <code>enum=[&quot;screening&quot;, &quot;remote&quot;, &quot;onsite&quot;]</code></p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "sortOrder",
-            "description": "<p>WorkflowStage sortOrder</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "createdAt",
-            "description": "<p>WorkflowStage createdAt</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "lastModifiedAt",
-            "description": "<p>WorkflowStage lastModifiedAt</p>"
           }
         ]
       }

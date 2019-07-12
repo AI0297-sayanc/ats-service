@@ -64,6 +64,7 @@ module.exports = {
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
    * @apiParam  {String} title Opening title
+   * @apiParam  {String[]} workflowStages Array of workflow stage Ids in desired order. Must have at least one element.
    * @apiParam  {String[]} [locations] Opening locations
    * @apiParam  {Number} [noOfOpenings=1] Opening noOfOpenings
    * @apiParam  {Boolean} [isActive=true] Opening isActive
@@ -90,15 +91,16 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages,
       } = req.body
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })
+      if (workflowStages === undefined || !Array.isArray(workflowStages) || workflowStages.length === 0) return res.status(400).json({ error: true, reason: "Field 'workflowStages' is mandatory, and must be an Array with at least one element" })
       const [_skillsRequired, _tags] = await Promise.all([
         Tag.batchUpsert("skill", skillsRequired),
         Tag.batchUpsert("opening", tags)
       ])
       const opening = await Opening.create({
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, _skillsRequired, _tags, _organization: req.user._organization, _createdBy: req.user._id
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, _skillsRequired, _tags, _workflowStages: workflowStages, _organization: req.user._organization, _createdBy: req.user._id
       })
       return res.json({ error: false, opening })
     } catch (err) {
@@ -117,6 +119,7 @@ module.exports = {
    *
    * @apiParam {String} id `URL Param` The _id of the Opening to edit
 
+   * @apiParam  {String[]} [workflowStages] Array of workflow stage Ids in desired order. Note that setting this field OVERWRITES existing array completely.
    * @apiParam  {String[]} [locations] Opening locations
    * @apiParam  {Number} [noOfOpenings] Opening noOfOpenings
    * @apiParam  {Boolean} [isActive] Opening isActive
@@ -143,7 +146,7 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags
+        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages
       } = req.body
       const opening = await Opening.findOne({ _id: req.params.id }).exec()
       if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening!" })
@@ -169,6 +172,9 @@ module.exports = {
       }
       if (tags !== undefined && Array.isArray(tags)) {
         opening._tags = await Tag.batchUpsert("opening", tags)
+      }
+      if (workflowStages !== undefined && Array.isArray(workflowStages)) {
+        opening._workflowStages = workflowStages
       }
 
       await opening.save()
@@ -196,7 +202,7 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await Opening.deleteOne({ _id: req.params.id, _organization: req.user._organization })
+      await Opening.deleteOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

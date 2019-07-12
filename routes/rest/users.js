@@ -141,7 +141,7 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await User.deleteOne({ _id: req.params.id })
+      await User.deleteOne({ _id: req.params.id }).exec()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
