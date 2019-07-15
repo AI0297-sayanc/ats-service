@@ -43,7 +43,8 @@ module.exports = {
         fullName: user.name.full,
         email: user.email,
         phone: user.phone,
-        _organization: user._organization
+        _organization: user._organization,
+        organization: user._organization,
       }
       const expiresInHours = (expiry === undefined || expiry === null || Number(expiry) === 0)
         ? 24 * 30 // 1 month (default)

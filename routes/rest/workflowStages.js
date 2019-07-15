@@ -20,7 +20,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const workflowStages = await WorkflowStage.find({ _organization: req.user.organization }).exec()
+      const workflowStages = await WorkflowStage.find({ _organization: req.user._organization }).exec()
       return res.json({ error: false, workflowStages })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -46,7 +46,7 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user.organization }).exec()
+      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       if (workflowStage === null) throw new Error("No such workflowstage for you!")
       return res.json({ error: false, workflowStage })
     } catch (err) {
@@ -79,7 +79,7 @@ module.exports = {
       } = req.body
       if (text === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'text'" })
       const workflowStage = await WorkflowStage.create({
-        text, type, _organization: req.user.organization
+        text, type, _organization: req.user._organization
       })
       return res.json({ error: false, workflowStage })
     } catch (err) {
@@ -112,7 +112,7 @@ module.exports = {
       const {
         text, type
       } = req.body
-      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user.organization }).exec()
+      const workflowStage = await WorkflowStage.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       if (workflowStage === null) return res.status(400).json({ error: true, reason: "No such WorkflowStage for you!" })
 
       if (text !== undefined) workflowStage.text = text
@@ -143,7 +143,7 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await WorkflowStage.deleteOne({ _id: req.params.id, _organization: req.user.organization }).exec()
+      await WorkflowStage.deleteOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
