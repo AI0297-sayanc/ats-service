@@ -48,6 +48,7 @@ module.exports = {
   async get(req, res) {
     try {
       const opening = await Opening.findOne({ _id: req.params.id, _organization: req.user._organization }).populate("_createdBy _skillsRequired").exec()
+      if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening for you!" })
       return res.json({ error: false, opening })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -148,9 +149,9 @@ module.exports = {
       const {
         title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages
       } = req.body
-      const opening = await Opening.findOne({ _id: req.params.id }).exec()
-      if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening!" })
-      if (String(opening._organization) !== String(req.use._organization)) return res.status(403).json({ error: true, reason: "Not your Opening!" })
+      const opening = await Opening.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
+      if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening for you!" })
+      // if (String(opening._organization) !== String(req.user._organization)) return res.status(403).json({ error: true, reason: "Not your Opening!" })
 
       if (title !== undefined) opening.title = title
       if (locations !== undefined) opening.locations = locations

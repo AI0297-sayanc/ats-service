@@ -20,7 +20,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const candidates = await Candidate.find({}).exec()
+      const candidates = await Candidate.find({ _organization: req.user._organization }).exec()
       return res.json({ error: false, candidates })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -46,7 +46,8 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const candidate = await Candidate.findOne({ _id: req.params.id }).exec()
+      const candidate = await Candidate.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
+      if (candidate === null) throw new Error("You don't have any such candidate")
       return res.json({ error: false, candidate })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -151,8 +152,8 @@ module.exports = {
       const {
         name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills
       } = req.body
-      const candidate = await Candidate.findOne({ _id: req.params.id }).exec()
-      if (candidate === null) return res.status(400).json({ error: true, reason: "No such Candidate!" })
+      const candidate = await Candidate.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
+      if (candidate === null) return res.status(400).json({ error: true, reason: "You don't have any such candidate!" })
 
       if (name !== undefined && name.first !== undefined) candidate.name.first = name.first
       if (name !== undefined && name.middle !== undefined) candidate.name.middle = name.middle
@@ -202,7 +203,7 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await Candidate.deleteOne({ _id: req.params.id }).exec()
+      await Candidate.deleteOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
