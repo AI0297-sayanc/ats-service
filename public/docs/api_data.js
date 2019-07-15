@@ -1270,6 +1270,13 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Opening description</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String[]",
             "optional": true,
             "field": "locations",
@@ -1484,6 +1491,13 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p><code>URL Param</code> The _id of the Opening to edit</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Opening description</p>"
           },
           {
             "group": "Parameter",

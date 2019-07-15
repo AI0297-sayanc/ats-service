@@ -8,6 +8,8 @@ const OpeningSchema = new mongoose.Schema({
     required: true
   },
 
+  description: String,
+
   locations: [String],
 
   noOfOpenings: {

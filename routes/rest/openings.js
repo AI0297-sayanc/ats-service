@@ -66,6 +66,7 @@ module.exports = {
    *
    * @apiParam  {String} title Opening title
    * @apiParam  {String[]} workflowStages Array of workflow stage Ids in desired order. Must have at least one element.
+   * @apiParam  {String} [description] Opening description
    * @apiParam  {String[]} [locations] Opening locations
    * @apiParam  {Number} [noOfOpenings=1] Opening noOfOpenings
    * @apiParam  {Boolean} [isActive=true] Opening isActive
@@ -92,7 +93,7 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages,
+        title, description, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages,
       } = req.body
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })
       if (workflowStages === undefined || !Array.isArray(workflowStages) || workflowStages.length === 0) return res.status(400).json({ error: true, reason: "Field 'workflowStages' is mandatory, and must be an Array with at least one element" })
@@ -101,7 +102,7 @@ module.exports = {
         Tag.batchUpsert("opening", tags)
       ])
       const opening = await Opening.create({
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, _skillsRequired, _tags, _workflowStages: workflowStages, _organization: req.user._organization, _createdBy: req.user._id
+        title, description, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, _skillsRequired, _tags, _workflowStages: workflowStages, _organization: req.user._organization, _createdBy: req.user._id
       })
       return res.json({ error: false, opening })
     } catch (err) {
@@ -120,6 +121,7 @@ module.exports = {
    *
    * @apiParam {String} id `URL Param` The _id of the Opening to edit
 
+   * @apiParam  {String} [description] Opening description
    * @apiParam  {String[]} [workflowStages] Array of workflow stage Ids in desired order. Note that setting this field OVERWRITES existing array completely.
    * @apiParam  {String[]} [locations] Opening locations
    * @apiParam  {Number} [noOfOpenings] Opening noOfOpenings
@@ -147,13 +149,14 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        title, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages
+        title, description, locations, noOfOpenings, isActive, isRemoteAllowed, positionType, jobFunction, minExpRequired, maxExpRequired, minCompensation, maxCompensation, hideCompensationDetails, minEducationalQualification, jobLevel, jobCode, skillsRequired, tags, workflowStages
       } = req.body
       const opening = await Opening.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening for you!" })
       // if (String(opening._organization) !== String(req.user._organization)) return res.status(403).json({ error: true, reason: "Not your Opening!" })
 
-      if (title !== undefined) opening.title = title
+      // if (title !== undefined) opening.title = title
+      if (description !== undefined) opening.description = description
       if (locations !== undefined) opening.locations = locations
       if (noOfOpenings !== undefined) opening.noOfOpenings = noOfOpenings
       if (isActive !== undefined && typeof isActive === "boolean") opening.isActive = isActive
