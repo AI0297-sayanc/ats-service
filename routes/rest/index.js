@@ -2,10 +2,12 @@ const express = require("express")
 const router = express.Router()
 
 const expressJwt = require("express-jwt")
+const multer = require("multer")
 
 const config = require("../../config")[process.env.NODE_ENV || "development"]
 
 const checkJwt = expressJwt({ secret: config.secret }) // the JWT auth check middleware
+const upload = multer({ dest: "/tmp/", limits: { fileSize: 5000000 } }) // max file size 5 MB
 
 const login = require("./auth")
 const signup = require("./auth/signup")
@@ -17,6 +19,7 @@ const workflowStages = require("./workflowStages")
 const tags = require("./tags")
 const widgets = require("./widgets")
 const messages = require("./messages")
+const imports = require("./data-import")
 
 router.post("/login", login.post) // UNAUTHENTICATED
 router.post("/signup", signup.post) // UNAUTHENTICATED
@@ -60,5 +63,8 @@ router.get("/widget/organization/code", widgets.getWidgetCode)
 
 router.post("/message/send", messages.post)
 router.get("/messages", messages.get)
+
+router.post("/import/openings", upload.single("csv-file"), imports.openings)
+router.post("/import/candidates", upload.single("csv-file"), imports.candidates)
 
 module.exports = router

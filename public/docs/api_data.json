@@ -1125,6 +1125,95 @@
     "groupTitle": "Event"
   },
   {
+    "type": "post",
+    "url": "/import/candidates",
+    "title": "1.2. Bulk import a list of candidates for a particular Opening from CSV file",
+    "name": "importCandidates",
+    "group": "ExportImport",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "openingId",
+            "description": "<p>The _id of the Opening to add these customers to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "BinaryFile",
+            "optional": false,
+            "field": "csv-file",
+            "description": "<p>The CSV file to upload containing the Candidates details. <code>N.B.:</code> It must have the <em>first row/line</em> as the headings, viz. <code>name.first,name.last,phone,email</code> title</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/data-import.js",
+    "groupTitle": "ExportImport"
+  },
+  {
+    "type": "post",
+    "url": "/import/openings",
+    "title": "1.1. Bulk import a list of openings from CSV file",
+    "name": "importOpenings",
+    "group": "ExportImport",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "BinaryFile",
+            "optional": false,
+            "field": "csv-file",
+            "description": "<p>The CSV file to upload containing the Openings details. <code>N.B.:</code> It must have the <em>first row/line</em> as the headings, viz. <code>name.first,name.last,phone,email</code> title</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/data-import.js",
+    "groupTitle": "ExportImport"
+  },
+  {
     "type": "GET",
     "url": "/messages",
     "title": "Get list of all email messages to a candidate, grouped by threads",

@@ -105,7 +105,7 @@ module.exports = {
       if (phone === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'phone'" })
       const _skills = await Tag.batchUpsert("skill", skills)
       const candidate = await Candidate.create({
-        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, _skills, _organization: req.user._organization, _opening: openingId
+        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, _skills, _organization: req.user._organization, _opening: openingId, _createdBy: req.user._id
       })
       return res.json({ error: false, candidate })
     } catch (err) {
