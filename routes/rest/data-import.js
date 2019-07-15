@@ -9,7 +9,7 @@ const Tag = require("../../models/tag")
 module.exports = {
   /**
    * Bulk import a list of openings from CSV file
-   * @api {post} /import/openings 1.1. Bulk import a list of openings from CSV file
+   * @api {post} /import/openings 1.0. Bulk import a list of openings from CSV file
    * @apiName importOpenings
    * @apiGroup ExportImport
    * @apiPermission User
@@ -55,7 +55,7 @@ module.exports = {
 
   /**
  * Bulk import a list of candidates for a particular Opening from CSV file
- * @api {post} /import/candidates 1.2. Bulk import a list of candidates for a particular Opening from CSV file
+ * @api {post} /import/candidates 1.1. Bulk import a list of candidates for a particular Opening from CSV file
  * @apiName importCandidates
  * @apiGroup ExportImport
  * @apiPermission User

@@ -1125,9 +1125,78 @@ define({ "api": [
     "groupTitle": "Event"
   },
   {
+    "type": "get",
+    "url": "/export/candidates",
+    "title": "2.1. Bulk export candidates for a particular opening as CSV file",
+    "name": "exportCandidates",
+    "group": "ExportImport",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "openingId",
+            "description": "<p>_id of the opening to export candidates from</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/data-export.js",
+    "groupTitle": "ExportImport"
+  },
+  {
+    "type": "get",
+    "url": "/export/openings",
+    "title": "2.0. Bulk export openings as CSV file",
+    "name": "exportOpenings",
+    "group": "ExportImport",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/data-export.js",
+    "groupTitle": "ExportImport"
+  },
+  {
     "type": "post",
     "url": "/import/candidates",
-    "title": "1.2. Bulk import a list of candidates for a particular Opening from CSV file",
+    "title": "1.1. Bulk import a list of candidates for a particular Opening from CSV file",
     "name": "importCandidates",
     "group": "ExportImport",
     "permission": [
@@ -1175,7 +1244,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/import/openings",
-    "title": "1.1. Bulk import a list of openings from CSV file",
+    "title": "1.0. Bulk import a list of openings from CSV file",
     "name": "importOpenings",
     "group": "ExportImport",
     "permission": [
