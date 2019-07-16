@@ -702,7 +702,7 @@ define({ "api": [
     "type": "put",
     "url": "/candidate/movetostage/:id",
     "title": "6.2. Move a Candidate to given workflow stage",
-    "name": "nextWorkflowStage",
+    "name": "moveToWorkflowStage",
     "group": "Candidate",
     "permission": [
       {
@@ -2279,7 +2279,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/applyforjob/:openingid",
-    "title": "Let a candidate apply for a job",
+    "title": "3.0. Let a candidate directly apply for a job",
     "name": "applyForJob",
     "group": "Widget",
     "permission": [
@@ -2299,10 +2299,31 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "name",
             "description": "<p>Name of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name.first",
+            "description": "<p>First Name of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name.middle",
+            "description": "<p>Middle Name of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name.last",
+            "description": "<p>Last Name of candidate applying</p>"
           },
           {
             "group": "Parameter",
@@ -2335,7 +2356,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/widget/organization/apikey",
-    "title": "Get the widget Api Key for your organization",
+    "title": "2.0. Get the widget Api Key for your organization",
     "name": "getApiKey",
     "group": "Widget",
     "permission": [
@@ -2359,7 +2380,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/widget/organization/code",
-    "title": "Get embeddable/shareable script code for your organization",
+    "title": "2.2. Get embeddable/shareable script code for your organization",
     "name": "getCode",
     "group": "Widget",
     "permission": [
@@ -2383,7 +2404,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/widget/openings/:apikey",
-    "title": "Get all openings for an organization by widget api key",
+    "title": "1.0 Get all openings for an organization by widget api key",
     "name": "getOpenings",
     "group": "Widget",
     "permission": [
@@ -2420,7 +2441,7 @@ define({ "api": [
   {
     "type": "PUT",
     "url": "/widget/organization/apikey",
-    "title": "Regenerate the widget Api Key for your organization",
+    "title": "2.1. Regenerate the widget Api Key for your organization",
     "name": "regenerateApiKey",
     "group": "Widget",
     "permission": [

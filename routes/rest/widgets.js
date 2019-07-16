@@ -8,7 +8,7 @@ const mailer = require("../../lib/mail")
 
 module.exports = {
   /**
-   * @api {GET} /widget/openings/:apikey Get all openings for an organization by widget api key
+   * @api {GET} /widget/openings/:apikey 1.0 Get all openings for an organization by widget api key
    * @apiName getOpenings
    * @apiGroup Widget
    * @apiPermission Public
@@ -40,7 +40,7 @@ module.exports = {
   // },
 
   /**
-  * @api {GET} /widget/organization/apikey Get the widget Api Key for your organization
+  * @api {GET} /widget/organization/apikey 2.0. Get the widget Api Key for your organization
   * @apiName getApiKey
   * @apiGroup Widget
   * @apiPermission User
@@ -61,7 +61,7 @@ module.exports = {
   },
 
   /**
-  * @api {PUT} /widget/organization/apikey Regenerate the widget Api Key for your organization
+  * @api {PUT} /widget/organization/apikey 2.1. Regenerate the widget Api Key for your organization
   * @apiName regenerateApiKey
   * @apiGroup Widget
   * @apiPermission User
@@ -84,7 +84,7 @@ module.exports = {
   },
 
   /**
-  * @api {GET} /widget/organization/code Get embeddable/shareable script code for your organization
+  * @api {GET} /widget/organization/code 2.2. Get embeddable/shareable script code for your organization
   * @apiName getCode
   * @apiGroup Widget
   * @apiPermission User
@@ -108,13 +108,16 @@ module.exports = {
 
   /**
     * Let a candidate apply for a job
-    * @api {post} /applyforjob/:openingid Let a candidate apply for a job
+    * @api {post} /applyforjob/:openingid 3.0. Let a candidate directly apply for a job
     * @apiName applyForJob
     * @apiGroup Widget
     * @apiPermission Public
     *
     * @apiParam  {String} openingid `URL Param` _id of opening to apply for
-    * @apiParam  {String} name Name of candidate applying
+    * @apiParam  {Object} name Name of candidate applying
+    * @apiParam  {String} name.first First Name of candidate applying
+    * @apiParam  {String} [name.middle] Middle Name of candidate applying
+    * @apiParam  {String} name.last Last Name of candidate applying
     * @apiParam  {String} email email of candidate applying
     * @apiParam  {String} phone phone of candidate applying
     * @apiParam  {String} cvLink URL to uploaded resume/cv file of candidate applying
@@ -123,10 +126,10 @@ module.exports = {
     const {
       name, email, phone, cvLink
     } = req.body
-    if (name === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'name" })
-    if (phone === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'phone" })
-    if (email === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'email" })
-    if (cvLink === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'cvLink" })
+    if (name === undefined || name.first === undefined || name.last === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory fields 'name' or 'name.first' or 'name.last'" })
+    if (phone === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'phone'" })
+    if (email === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'email'" })
+    if (cvLink === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'cvLink'" })
     try {
       const opening = await Opening.findOne({ _id: req.params.openingid }).populate("_organization _createdBy").exec()
       if (opening === null) throw new Error("No such opening!")

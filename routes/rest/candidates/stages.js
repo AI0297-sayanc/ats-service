@@ -38,7 +38,7 @@ module.exports = {
   /**
    * Move a Candidate to given workflow stage
    * @api {put} /candidate/movetostage/:id 6.2. Move a Candidate to given workflow stage
-   * @apiName nextWorkflowStage
+   * @apiName moveToWorkflowStage
    * @apiGroup Candidate
    * @apiPermission User
    *
