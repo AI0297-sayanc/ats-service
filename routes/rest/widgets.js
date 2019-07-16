@@ -1,6 +1,10 @@
 const cuid = require("cuid")
 
 const Org = require("../../models/organization")
+const Opening = require("../../models/opening")
+const Candidate = require("../../models/candidate")
+
+const mailer = require("../../lib/mail")
 
 module.exports = {
   /**
@@ -102,4 +106,49 @@ module.exports = {
     }
   },
 
+  /**
+    * Let a candidate apply for a job
+    * @api {post} /applyforjob/:openingid Let a candidate apply for a job
+    * @apiName applyForJob
+    * @apiGroup Widget
+    * @apiPermission Public
+    *
+    * @apiParam  {String} openingid `URL Param` _id of opening to apply for
+    * @apiParam  {String} name Name of candidate applying
+    * @apiParam  {String} email email of candidate applying
+    * @apiParam  {String} phone phone of candidate applying
+    * @apiParam  {String} cvLink URL to uploaded resume/cv file of candidate applying
+    */
+  async applyForJob(req, res) {
+    const {
+      name, email, phone, cvLink
+    } = req.body
+    if (name === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'name" })
+    if (phone === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'phone" })
+    if (email === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'email" })
+    if (cvLink === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'cvLink" })
+    try {
+      const opening = await Opening.findOne({ _id: req.params.openingid }).populate("_organization _createdBy").exec()
+      if (opening === null) throw new Error("No such opening!")
+      const candidate = await Candidate.create({
+        name, email, phone, cvLink, _opening: opening._id, _organization: opening._organization._id
+      })
+      // send emails:
+      await Promise.all([
+        mailer("application-received-to-candidate", {
+          to: [email],
+          subject: "Your Application has been Submitted",
+          locals: { candidate: name, position: opening.title, company: opening._organization.title }
+        }),
+        mailer("application-received-to-company", {
+          to: [opening._createdBy.email],
+          subject: "New Candidate Applied",
+          locals: { candidate: name, position: opening.title, company: opening._organization.title }
+        })
+      ])
+      return res.json({ error: false, candidate })
+    } catch (err) {
+      return res.json({ error: true, reason: err.message })
+    }
+  },
 }

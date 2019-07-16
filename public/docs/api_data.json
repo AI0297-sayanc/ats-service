@@ -2277,6 +2277,62 @@
     "groupTitle": "User"
   },
   {
+    "type": "post",
+    "url": "/applyforjob/:openingid",
+    "title": "Let a candidate apply for a job",
+    "name": "applyForJob",
+    "group": "Widget",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "openingid",
+            "description": "<p><code>URL Param</code> _id of opening to apply for</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>phone of candidate applying</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cvLink",
+            "description": "<p>URL to uploaded resume/cv file of candidate applying</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/widgets.js",
+    "groupTitle": "Widget"
+  },
+  {
     "type": "GET",
     "url": "/widget/organization/apikey",
     "title": "Get the widget Api Key for your organization",
