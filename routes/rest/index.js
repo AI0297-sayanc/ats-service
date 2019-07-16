@@ -29,7 +29,7 @@ router.post("/login", login.post) // UNAUTHENTICATED
 router.post("/signup", signup.post) // UNAUTHENTICATED
 router.post("/forgotpassword", forgotpassword.startWorkflow) // UNAUTHENTICATED; AJAX
 router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; AJAX
-router.post("/tags/:type", tags.find) // UNAUTHENTICATED
+router.get("/tags/:type", tags.find) // UNAUTHENTICATED
 router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
 // router.post("/widget/apply", widgets.post) // UNAUTHENTICATED
 router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Webhook Handler
