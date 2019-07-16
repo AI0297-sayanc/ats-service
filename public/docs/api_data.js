@@ -395,13 +395,13 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/rest/candidates.js",
+    "filename": "routes/rest/candidates/index.js",
     "groupTitle": "Candidate"
   },
   {
     "type": "delete",
     "url": "/candidate/:id",
-    "title": "4.0 Delete a Candidate by _id",
+    "title": "5.0 Delete a Candidate by _id",
     "name": "deleteCandidate",
     "group": "Candidate",
     "permission": [
@@ -445,7 +445,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/rest/candidates.js",
+    "filename": "routes/rest/candidates/index.js",
     "groupTitle": "Candidate"
   },
   {
@@ -608,7 +608,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/rest/candidates.js",
+    "filename": "routes/rest/candidates/index.js",
     "groupTitle": "Candidate"
   },
   {
@@ -645,7 +645,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/rest/candidates.js",
+    "filename": "routes/rest/candidates/index.js",
     "groupTitle": "Candidate"
   },
   {
@@ -695,7 +695,96 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/rest/candidates.js",
+    "filename": "routes/rest/candidates/index.js",
+    "groupTitle": "Candidate"
+  },
+  {
+    "type": "put",
+    "url": "/candidate/movetostage/:id",
+    "title": "6.2. Move a Candidate to given workflow stage",
+    "name": "nextWorkflowStage",
+    "group": "Candidate",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "stageId",
+            "description": "<p>Workflow stage _id to move to</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/stages.js",
+    "groupTitle": "Candidate"
+  },
+  {
+    "type": "put",
+    "url": "/candidate/nextstage/:id",
+    "title": "6.1. Move a Candidate to next workflow stage",
+    "name": "nextWorkflowStage",
+    "group": "Candidate",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/stages.js",
     "groupTitle": "Candidate"
   },
   {

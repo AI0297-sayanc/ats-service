@@ -1,5 +1,5 @@
-const Candidate = require("../../models/candidate.js")
-const Tag = require("../../models/tag")
+const Candidate = require("../../../models/candidate")
+const Tag = require("../../../models/tag")
 
 module.exports = {
 
@@ -178,6 +178,8 @@ module.exports = {
         candidate._skills = await Tag.batchUpsert("skill", skills)
       }
 
+      candidate.lastModifiedAt = Date.now()
+
       await candidate.save()
       return res.json({ error: false, candidate })
     } catch (err) {
@@ -187,7 +189,7 @@ module.exports = {
 
   /**
    * Delete a Candidate by _id
-   * @api {delete} /candidate/:id 4.0 Delete a Candidate by _id
+   * @api {delete} /candidate/:id 5.0 Delete a Candidate by _id
    * @apiName deleteCandidate
    * @apiGroup Candidate
    * @apiPermission User

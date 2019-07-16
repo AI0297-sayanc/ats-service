@@ -21,6 +21,8 @@ const widgets = require("./widgets")
 const messages = require("./messages")
 const dataImports = require("./data-import")
 const dataExports = require("./data-export")
+const candidates = require("./candidates")
+const stages = require("./candidates/stages")
 
 
 router.post("/login", login.post) // UNAUTHENTICATED
@@ -71,5 +73,14 @@ router.post("/import/candidates", upload.single("csv-file"), dataImports.candida
 
 router.get("/export/openings", dataExports.openings)
 router.get("/export/candiates", dataExports.candidates)
+
+router.get("/candidates", candidates.find)
+router.get("/candidate/:id", candidates.get)
+router.post("/candidate", candidates.post)
+router.put("/candidate/:id", candidates.put)
+router.delete("/candidate/:id", candidates.delete)
+
+router.put("/candidate/nextstage/:id", stages.nextStage)
+router.put("/candidate/movetostage/:id", stages.moveToStage)
 
 module.exports = router
