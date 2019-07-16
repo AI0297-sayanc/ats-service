@@ -28,8 +28,8 @@ module.exports = {
     if (req.body.candidateId === undefined || req.body.html === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory fields 'candidateId' or 'html'" })
     const data = {}
     try {
-      const candidate = await Candidate.findOne({ _id: req.body.candidateId }).exec()
-      if (candidate === null) return res.status(400).json({ error: true, reason: "No such candidate!" })
+      const candidate = await Candidate.findOne({ _id: req.body.candidateId, _organization: req.user._organization }).exec()
+      if (candidate === null) return res.status(400).json({ error: true, reason: "No such candidate in your organization!" })
 
       // data.from = `Recruitech LS<${process.env.MAILGUN_EMAIL_FROM}>`
       data.from = `${req.user.name.full} <${req.user.email}>`
