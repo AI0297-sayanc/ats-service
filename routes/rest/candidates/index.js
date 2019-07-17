@@ -20,7 +20,16 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const candidates = await Candidate.find({ _organization: req.user._organization }).exec()
+      const candidates = await Candidate
+        .find({ _organization: req.user._organization })
+        .populate("_skills _currentWorkflowStage _organization _createdBy")
+        .populate({
+          path: "_opening",
+          populate: {
+            path: "_workflowStages"
+          }
+        })
+        .exec()
       return res.json({ error: false, candidates })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -46,7 +55,16 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const candidate = await Candidate.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
+      const candidate = await Candidate
+        .findOne({ _id: req.params.id, _organization: req.user._organization })
+        .populate("_skills _currentWorkflowStage _organization _createdBy")
+        .populate({
+          path: "_opening",
+          populate: {
+            path: "_workflowStages"
+          }
+        })
+        .exec()
       if (candidate === null) throw new Error("You don't have any such candidate")
       return res.json({ error: false, candidate })
     } catch (err) {
