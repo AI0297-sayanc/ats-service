@@ -5,12 +5,15 @@ module.exports = {
 
   /**
    * Fetch all the Candidates
-   * @api {get} /candidates 1.0 Fetch all the Candidates
+   * @api {post} /candidates 1.0 Fetch all the Candidates
    * @apiName fetchCandidates
    * @apiGroup Candidate
    * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
+   *
+   * @apiParam  {String}  [email] Optionally filter by email/altEmail
+   * @apiParam  {String}  [phone] Optionally filter by phone
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -19,9 +22,24 @@ module.exports = {
    * }
    */
   async find(req, res) {
+    const { email, phone } = req.body
+    const queryObj = { _organization: req.user._organization }
+    const orClauses = []
+    if (email !== undefined) {
+      orClauses.push({ email: email.toLowerCase() })
+      orClauses.push({ altEmail: email.toLowerCase() })
+    }
+    if (phone !== undefined) {
+      orClauses.push({
+        phone: new RegExp(phone)
+      })
+    }
+    if (orClauses.length > 0) {
+      queryObj.$or = orClauses
+    }
     try {
       const candidates = await Candidate
-        .find({ _organization: req.user._organization })
+        .find(queryObj)
         .populate("_skills _currentWorkflowStage _organization _createdBy")
         .populate({
           path: "_opening",

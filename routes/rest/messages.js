@@ -32,8 +32,8 @@ module.exports = {
       if (candidate === null) return res.status(400).json({ error: true, reason: "No such candidate in your organization!" })
 
       // data.from = `Recruitech LS<${process.env.MAILGUN_EMAIL_FROM}>`
-      // data.from = `${req.user.fullName} <${req.user.email}>`
-      data.from = `Vineet Harbhajanka <vineet@logic-square.com>`
+      data.from = `${req.user.fullName} <${req.user.email}>`
+      // data.from = `Vineet Harbhajanka <vineet@logic-square.com>`
       data.to = candidate.email
       data.subject = req.body.subject || "No Subject" // might be overriden below (in case of replying)
       data.html = req.body.html || req.body.text || req.body.content || req.body.body

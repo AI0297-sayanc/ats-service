@@ -74,7 +74,7 @@ router.post("/import/candidates", upload.single("csv-file"), dataImports.candida
 router.get("/export/openings", dataExports.openings)
 router.get("/export/candiates", dataExports.candidates)
 
-router.get("/candidates", candidates.find)
+router.post("/candidates", candidates.find)
 router.get("/candidate/:id", candidates.get)
 router.post("/candidate", candidates.post)
 router.put("/candidate/:id", candidates.put)

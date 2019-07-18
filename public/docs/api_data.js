@@ -612,7 +612,7 @@ define({ "api": [
     "groupTitle": "Candidate"
   },
   {
-    "type": "get",
+    "type": "post",
     "url": "/candidates",
     "title": "1.0 Fetch all the Candidates",
     "name": "fetchCandidates",
@@ -631,6 +631,26 @@ define({ "api": [
             "optional": false,
             "field": "Authorization",
             "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Optionally filter by email/altEmail</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Optionally filter by phone</p>"
           }
         ]
       }
