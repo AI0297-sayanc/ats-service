@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
 
+const { sendMessage } = require("../lib/message")
+
 const CandidateSchema = new mongoose.Schema({
 
   name: {
@@ -131,8 +133,10 @@ CandidateSchema.pre("save", async function (next) {
   const now = Date.now()
   if (!this.isNew && this.isModified("decisionStatus")) {
     if (this.decisionStatus === "rejected") {
+      this.wasRejected = true // for usage in post hooks below
       this.rejectedAt = now
     } else if (this.decisionStatus === "accepted") {
+      this.wasAccepted = true // for usage in post hooks below
       this.acceptedAt = now
     }
   }
@@ -159,6 +163,37 @@ CandidateSchema.statics.findSimilarTo = function ({ phone = null, email = null }
   }
   return this.find({ $or: orClause }).exec()
 }
+
+/* Send automatic accept/reject emails to candidates: */
+// eslint-disable-next-line prefer-arrow-callback
+CandidateSchema.post("save", async function (doc) {
+  try {
+    // eslint-disable-next-line newline-per-chained-call
+    const [user, opening] = await Promise.all([
+      mongoose.model("User").findOne({ _id: doc._user }).populate("_organization").exec(),
+      mongoose.model("Opening").findOne({ _id: doc._opening }).lean().exec()
+    ])
+    let subject
+    let content
+    if (doc.wasAccepted) {
+      subject = "Congrats! You are accepted!"
+      content = `<p>Congrats ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Accepted.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
+    } else if (doc.wasRejected) {
+      subject = "Sorry! You were rejected!"
+      content = `<p>Sorry ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Rejected.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
+    }
+
+    await sendMessage({
+      user,
+      candidate: doc,
+      mailSubject: subject,
+      mailContent: content,
+      isAuto: true
+    })
+  } catch (error) {
+    console.log("==> ERR sending automated accept/reject mail: ", error);
+  }
+})
 
 CandidateSchema.set("toJSON", { virtuals: true })
 CandidateSchema.set("toObject", { virtuals: true })
