@@ -12,6 +12,7 @@ module.exports = {
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
+   * @apiParam  {String}  [openingId] Optionally filter by Opening
    * @apiParam  {String}  [email] Optionally filter by email/altEmail
    * @apiParam  {String}  [phone] Optionally filter by phone
    *
@@ -22,8 +23,9 @@ module.exports = {
    * }
    */
   async find(req, res) {
-    const { email, phone } = req.body
+    const { openingId, email, phone } = req.body
     const queryObj = { _organization: req.user._organization }
+    if (openingId !== undefined) queryObj._opening = openingId
     const orClauses = []
     if (email !== undefined) {
       orClauses.push({ email: email.toLowerCase() })

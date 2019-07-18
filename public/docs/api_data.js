@@ -642,6 +642,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": true,
+            "field": "openingId",
+            "description": "<p>Optionally filter by Opening</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
             "field": "email",
             "description": "<p>Optionally filter by email/altEmail</p>"
           },
