@@ -76,6 +76,7 @@ module.exports = {
       const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()
       if (org === null) return res.status(400).json({ error: true, reason: "No Organization!" })
       org.widgetApiKey = cuid()
+      org.lastModifiedAt = Date.now()
       await org.save()
       return res.json({ error: false, apiKey: org.widgetApiKey })
     } catch (err) {

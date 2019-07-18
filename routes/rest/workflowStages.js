@@ -118,6 +118,8 @@ module.exports = {
       if (text !== undefined) workflowStage.text = text
       if (type !== undefined) workflowStage.type = type
 
+      workflowStage.lastModifiedAt = Date.now()
+
       await workflowStage.save()
       return res.json({ error: false, workflowStage })
     } catch (err) {

@@ -14,7 +14,7 @@ module.exports = {
   /**
   * @api {POST} /message/send Send a message to a candidate.
   * @apiName sendMessage
-  * @apiGroup Messages
+  * @apiGroup CandidateMessage
   * @apiPermission User
   * @apiParam  {String} subject Mail Subject
   * @apiParam  {String} candidateId _id of candidate
@@ -109,7 +109,7 @@ module.exports = {
   /**
   * @api {GET} /messages Get list of all email messages to a candidate, grouped by threads
   * @apiName getMessages
-  * @apiGroup Messages
+  * @apiGroup CandidateMessage
   * @apiPermission User
   * @apiParam  {String} candidateId _id of the candidate
   * @apiParam  {Boolean} [showMyMailsOnly=false] Optionally filter to show emails sent by current user only

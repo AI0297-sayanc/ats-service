@@ -7,8 +7,8 @@ module.exports = {
    * Fetch all the Notes for a Candidate
    * @api {get} /notes/:candidateid 1.0 Fetch all the Notes for a Candidate
    * @apiName fetchNotes
-   * @apiGroup Note
-   * @apiPermission Public
+   * @apiGroup CandidateNote
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    * @apiParam  {String} candidateid `URL Param` _id of the Candidate
@@ -33,8 +33,8 @@ module.exports = {
    * Find a Note by _id
    * @api {get} /note/:id 2.0 Find a Note by its _id
    * @apiName getNote
-   * @apiGroup Note
-   * @apiPermission Public
+   * @apiGroup CandidateNote
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -60,8 +60,8 @@ module.exports = {
    * Create a new Note
    * @api {post} /note 3.0 Create a new Note
    * @apiName createNote
-   * @apiGroup Note
-   * @apiPermission Public
+   * @apiGroup CandidateNote
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -94,8 +94,8 @@ module.exports = {
    * Edit a Note by _id
    * @api {put} /note/:id 4.0 Edit a Note by _id
    * @apiName editNote
-   * @apiGroup Note
-   * @apiPermission Public
+   * @apiGroup CandidateNote
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
@@ -119,6 +119,7 @@ module.exports = {
       if (note === null) return res.status(400).json({ error: true, reason: "No such Note for you!" })
 
       if (text !== undefined) note.text = text
+      note.lastModifiedAt = Date.now()
 
       await note.save()
       return res.json({ error: false, note })
@@ -131,8 +132,8 @@ module.exports = {
    * Delete a Note by _id
    * @api {delete} /note/:id 4.0 Delete a Note by _id
    * @apiName deleteNote
-   * @apiGroup Note
-   * @apiPermission Public
+   * @apiGroup CandidateNote
+   * @apiPermission User
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *

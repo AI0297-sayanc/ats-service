@@ -202,6 +202,635 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/event",
+    "title": "3.0 Create a new Event for a Candidate at its current workflow stage",
+    "name": "createEvent",
+    "group": "CandidateEvent",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of Candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>Event title</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Event description</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "start",
+            "description": "<p>Event start</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "end",
+            "description": "<p>Event end</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location",
+            "description": "<p>Event location</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "url",
+            "description": "<p>Event url</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "geo",
+            "description": "<p>Event geo</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "geo.lat",
+            "description": "<p>Event geo.lat</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "geo.lon",
+            "description": "<p>Event geo.lon</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": true,
+            "field": "categories",
+            "description": "<p>Event categories</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>Event status</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "organizer",
+            "description": "<p>Event organizer</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organizer.name",
+            "description": "<p>Event organizer.name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organizer.email",
+            "description": "<p>Event organizer.email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "undefined[]",
+            "optional": true,
+            "field": "attendees",
+            "description": "<p>Event attendees</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    event: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/events.js",
+    "groupTitle": "CandidateEvent"
+  },
+  {
+    "type": "get",
+    "url": "/events/:candidateid",
+    "title": "1.0 Fetch all the Events for a Candidate",
+    "name": "fetchEvents",
+    "group": "CandidateEvent",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateid",
+            "description": "<p><code>URL Param</code> _id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    events: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/events.js",
+    "groupTitle": "CandidateEvent"
+  },
+  {
+    "type": "get",
+    "url": "/event/:id",
+    "title": "2.0 Find a Event by _id",
+    "name": "getEvent",
+    "group": "CandidateEvent",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Event to find</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    event: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/events.js",
+    "groupTitle": "CandidateEvent"
+  },
+  {
+    "type": "GET",
+    "url": "/messages",
+    "title": "Get list of all email messages to a candidate, grouped by threads",
+    "name": "getMessages",
+    "group": "CandidateMessage",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of the candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "showMyMailsOnly",
+            "defaultValue": "false",
+            "description": "<p>Optionally filter to show emails sent by current user only</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    threads: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/messages.js",
+    "groupTitle": "CandidateMessage"
+  },
+  {
+    "type": "POST",
+    "url": "/message/send",
+    "title": "Send a message to a candidate.",
+    "name": "sendMessage",
+    "group": "CandidateMessage",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>Mail Subject</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of candidate</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "html",
+            "description": "<p>The html body of the email message</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "replyToMsgId",
+            "description": "<p>Mailgun message ID to reply to. If specified, implies that this is continuation of an existing message thread.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/messages.js",
+    "groupTitle": "CandidateMessage"
+  },
+  {
+    "type": "post",
+    "url": "/note",
+    "title": "3.0 Create a new Note",
+    "name": "createNote",
+    "group": "CandidateNote",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "text",
+            "description": "<p>Note text</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "CandidateNote"
+  },
+  {
+    "type": "delete",
+    "url": "/note/:id",
+    "title": "4.0 Delete a Note by _id",
+    "name": "deleteNote",
+    "group": "CandidateNote",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to delete</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n    error : false,\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "CandidateNote"
+  },
+  {
+    "type": "put",
+    "url": "/note/:id",
+    "title": "4.0 Edit a Note by _id",
+    "name": "editNote",
+    "group": "CandidateNote",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to edit</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "createdAt",
+            "description": "<p>Note createdAt</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "lastModifiedAt",
+            "description": "<p>Note lastModifiedAt</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "CandidateNote"
+  },
+  {
+    "type": "get",
+    "url": "/notes/:candidateid",
+    "title": "1.0 Fetch all the Notes for a Candidate",
+    "name": "fetchNotes",
+    "group": "CandidateNote",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateid",
+            "description": "<p><code>URL Param</code> _id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    notes: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "CandidateNote"
+  },
+  {
+    "type": "get",
+    "url": "/note/:id",
+    "title": "2.0 Find a Note by its _id",
+    "name": "getNote",
+    "group": "CandidateNote",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to find</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "CandidateNote"
+  },
+  {
+    "type": "post",
     "url": "/candidate",
     "title": "3.0 Create a new Candidate",
     "name": "createCandidate",
@@ -815,432 +1444,6 @@ define({ "api": [
     "groupTitle": "Candidate"
   },
   {
-    "type": "post",
-    "url": "/event",
-    "title": "3.0 Create a new Event",
-    "name": "createEvent",
-    "group": "Event",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "title",
-            "description": "<p>Event title</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "description",
-            "description": "<p>Event description</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "location",
-            "description": "<p>Event location</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "start",
-            "description": "<p>Event start</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "end",
-            "description": "<p>Event end</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "url",
-            "description": "<p>Event url</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": true,
-            "field": "geo",
-            "description": "<p>Event geo</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lat",
-            "description": "<p>Event geo.lat</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lon",
-            "description": "<p>Event geo.lon</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String[]",
-            "optional": true,
-            "field": "categories",
-            "description": "<p>Event categories</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "status",
-            "description": "<p>Event status</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": true,
-            "field": "organizer",
-            "description": "<p>Event organizer</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "organizer.name",
-            "description": "<p>Event organizer.name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "organizer.email",
-            "description": "<p>Event organizer.email</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "undefined[]",
-            "optional": true,
-            "field": "attendees",
-            "description": "<p>Event attendees</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    event: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/events.js",
-    "groupTitle": "Event"
-  },
-  {
-    "type": "delete",
-    "url": "/event/:id",
-    "title": "4.0 Delete a Event by _id",
-    "name": "deleteEvent",
-    "group": "Event",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Event to delete</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n    error : false,\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/events.js",
-    "groupTitle": "Event"
-  },
-  {
-    "type": "put",
-    "url": "/event/:id",
-    "title": "4.0 Edit a Event by _id",
-    "name": "editEvent",
-    "group": "Event",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Event to edit</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "location",
-            "description": "<p>Event location</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "start",
-            "description": "<p>Event start</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "end",
-            "description": "<p>Event end</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "url",
-            "description": "<p>Event url</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": true,
-            "field": "geo",
-            "description": "<p>Event geo</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lat",
-            "description": "<p>Event geo.lat</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lon",
-            "description": "<p>Event geo.lon</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String[]",
-            "optional": true,
-            "field": "categories",
-            "description": "<p>Event categories</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "status",
-            "description": "<p>Event status</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": true,
-            "field": "organizer",
-            "description": "<p>Event organizer</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "organizer.name",
-            "description": "<p>Event organizer.name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "organizer.email",
-            "description": "<p>Event organizer.email</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "undefined[]",
-            "optional": true,
-            "field": "attendees",
-            "description": "<p>Event attendees</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    event: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/events.js",
-    "groupTitle": "Event"
-  },
-  {
-    "type": "get",
-    "url": "/events",
-    "title": "1.0 Fetch all the Events",
-    "name": "fetchEvents",
-    "group": "Event",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    events: [{}]\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/events.js",
-    "groupTitle": "Event"
-  },
-  {
-    "type": "get",
-    "url": "/event/:id",
-    "title": "2.0 Find a Event by _id",
-    "name": "getEvent",
-    "group": "Event",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Event to find</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    event: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/events.js",
-    "groupTitle": "Event"
-  },
-  {
     "type": "get",
     "url": "/export/candidates",
     "title": "2.1. Bulk export candidates for a particular opening as CSV file",
@@ -1397,380 +1600,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/rest/data-import.js",
     "groupTitle": "ExportImport"
-  },
-  {
-    "type": "GET",
-    "url": "/messages",
-    "title": "Get list of all email messages to a candidate, grouped by threads",
-    "name": "getMessages",
-    "group": "Messages",
-    "permission": [
-      {
-        "name": "User"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "candidateId",
-            "description": "<p>_id of the candidate</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "showMyMailsOnly",
-            "defaultValue": "false",
-            "description": "<p>Optionally filter to show emails sent by current user only</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    threads: [{}]\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/messages.js",
-    "groupTitle": "Messages"
-  },
-  {
-    "type": "POST",
-    "url": "/message/send",
-    "title": "Send a message to a candidate.",
-    "name": "sendMessage",
-    "group": "Messages",
-    "permission": [
-      {
-        "name": "User"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "subject",
-            "description": "<p>Mail Subject</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "candidateId",
-            "description": "<p>_id of candidate</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "html",
-            "description": "<p>The html body of the email message</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "replyToMsgId",
-            "description": "<p>Mailgun message ID to reply to. If specified, implies that this is continuation of an existing message thread.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/messages.js",
-    "groupTitle": "Messages"
-  },
-  {
-    "type": "post",
-    "url": "/note",
-    "title": "3.0 Create a new Note",
-    "name": "createNote",
-    "group": "Note",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "text",
-            "description": "<p>Note text</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "candidateId",
-            "description": "<p>_id of the Candidate</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    note: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/candidates/notes.js",
-    "groupTitle": "Note"
-  },
-  {
-    "type": "delete",
-    "url": "/note/:id",
-    "title": "4.0 Delete a Note by _id",
-    "name": "deleteNote",
-    "group": "Note",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Note to delete</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "{\n    error : false,\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/candidates/notes.js",
-    "groupTitle": "Note"
-  },
-  {
-    "type": "put",
-    "url": "/note/:id",
-    "title": "4.0 Edit a Note by _id",
-    "name": "editNote",
-    "group": "Note",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Note to edit</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "createdAt",
-            "description": "<p>Note createdAt</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "lastModifiedAt",
-            "description": "<p>Note lastModifiedAt</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    note: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/candidates/notes.js",
-    "groupTitle": "Note"
-  },
-  {
-    "type": "get",
-    "url": "/notes/:candidateid",
-    "title": "1.0 Fetch all the Notes for a Candidate",
-    "name": "fetchNotes",
-    "group": "Note",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "candidateid",
-            "description": "<p><code>URL Param</code> _id of the Candidate</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    notes: [{}]\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/candidates/notes.js",
-    "groupTitle": "Note"
-  },
-  {
-    "type": "get",
-    "url": "/note/:id",
-    "title": "2.0 Find a Note by its _id",
-    "name": "getNote",
-    "group": "Note",
-    "permission": [
-      {
-        "name": "Public"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p><code>URL Param</code> The _id of the Note to find</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false,\n    note: {}\n}",
-          "type": "type"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/rest/candidates/notes.js",
-    "groupTitle": "Note"
   },
   {
     "type": "post",

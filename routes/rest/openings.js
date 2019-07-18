@@ -181,6 +181,8 @@ module.exports = {
         opening._workflowStages = workflowStages
       }
 
+      opening.lastModifiedAt = Date.now()
+
       await opening.save()
       return res.json({ error: false, opening })
     } catch (err) {
