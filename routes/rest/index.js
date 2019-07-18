@@ -22,6 +22,7 @@ const messages = require("./messages")
 const dataImports = require("./data-import")
 const dataExports = require("./data-export")
 const candidates = require("./candidates")
+const notes = require("./candidates/notes")
 const stages = require("./candidates/stages")
 
 
@@ -79,6 +80,12 @@ router.get("/candidate/:id", candidates.get)
 router.post("/candidate", candidates.post)
 router.put("/candidate/:id", candidates.put)
 router.delete("/candidate/:id", candidates.delete)
+
+router.get("/notes", notes.find)
+router.get("/note/:id", notes.get)
+router.post("/note", notes.post)
+router.put("/note/:id", notes.put)
+router.delete("/note/:id", notes.delete)
 
 router.put("/candidate/nextstage/:id", stages.nextStage)
 router.put("/candidate/movetostage/:id", stages.moveToStage)

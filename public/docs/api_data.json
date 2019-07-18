@@ -1503,6 +1503,277 @@
   },
   {
     "type": "post",
+    "url": "/note",
+    "title": "3.0 Create a new Note",
+    "name": "createNote",
+    "group": "Note",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "text",
+            "description": "<p>Note text</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateId",
+            "description": "<p>_id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "Note"
+  },
+  {
+    "type": "delete",
+    "url": "/note/:id",
+    "title": "4.0 Delete a Note by _id",
+    "name": "deleteNote",
+    "group": "Note",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to delete</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n    error : false,\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "Note"
+  },
+  {
+    "type": "put",
+    "url": "/note/:id",
+    "title": "4.0 Edit a Note by _id",
+    "name": "editNote",
+    "group": "Note",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to edit</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "createdAt",
+            "description": "<p>Note createdAt</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "lastModifiedAt",
+            "description": "<p>Note lastModifiedAt</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "Note"
+  },
+  {
+    "type": "get",
+    "url": "/notes/:candidateid",
+    "title": "1.0 Fetch all the Notes for a Candidate",
+    "name": "fetchNotes",
+    "group": "Note",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "candidateid",
+            "description": "<p><code>URL Param</code> _id of the Candidate</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    notes: [{}]\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "Note"
+  },
+  {
+    "type": "get",
+    "url": "/note/:id",
+    "title": "2.0 Find a Note by its _id",
+    "name": "getNote",
+    "group": "Note",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Note to find</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response: 200 OK",
+          "content": "{\n    error : false,\n    note: {}\n}",
+          "type": "type"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/notes.js",
+    "groupTitle": "Note"
+  },
+  {
+    "type": "post",
     "url": "/opening",
     "title": "3.0 Create a new Opening",
     "name": "createOpening",
