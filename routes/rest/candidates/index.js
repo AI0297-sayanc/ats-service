@@ -13,8 +13,8 @@ module.exports = {
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
    * @apiParam  {String}  [openingId] Optionally filter by Opening
-   * @apiParam  {String}  [email] Optionally filter by email/altEmail
-   * @apiParam  {String}  [phone] Optionally filter by phone
+   * @apiParam  {String}  [email] Optionally filter by email/altEmail (N.B.: email/phone filtering is OR based)
+   * @apiParam  {String}  [phone] Optionally filter by phone (N.B.: email/phone filtering is OR based)
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {

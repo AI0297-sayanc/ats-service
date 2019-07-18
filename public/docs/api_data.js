@@ -650,14 +650,14 @@ define({ "api": [
             "type": "String",
             "optional": true,
             "field": "email",
-            "description": "<p>Optionally filter by email/altEmail</p>"
+            "description": "<p>Optionally filter by email/altEmail (N.B.: email/phone filtering is OR based)</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "phone",
-            "description": "<p>Optionally filter by phone</p>"
+            "description": "<p>Optionally filter by phone (N.B.: email/phone filtering is OR based)</p>"
           }
         ]
       }

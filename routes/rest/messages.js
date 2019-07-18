@@ -8,6 +8,8 @@ const mailgun = Mailgun({
   domain: process.env.MAILGUN_DOMAIN
 })
 
+const { sendMessage } = require("../../lib/message")
+
 module.exports = {
   /**
   * @api {POST} /message/send Send a message to a candidate.
@@ -26,43 +28,18 @@ module.exports = {
   */
   async post(req, res) {
     if (req.body.candidateId === undefined || req.body.html === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory fields 'candidateId' or 'html'" })
-    const data = {}
     try {
       const candidate = await Candidate.findOne({ _id: req.body.candidateId, _organization: req.user._organization }).exec()
       if (candidate === null) return res.status(400).json({ error: true, reason: "No such candidate in your organization!" })
 
-      // data.from = `Recruitech LS<${process.env.MAILGUN_EMAIL_FROM}>`
-      data.from = `${req.user.fullName} <${req.user.email}>`
-      // data.from = `Vineet Harbhajanka <vineet@logic-square.com>`
-      data.to = candidate.email
-      data.subject = req.body.subject || "No Subject" // might be overriden below (in case of replying)
-      data.html = req.body.html || req.body.text || req.body.content || req.body.body
-      data.isOpened = false
-      if (req.body.replyToMsgId !== undefined) { // exisiting thread (replying)
-        // eslint-disable-next-line newline-per-chained-call
-        const { threadId, subject } = await Mail.findOne({ mgMsgId: req.body.replyToMsgId }).select("threadId subject").lean().exec()
-        data.replyToMsgId = req.body.replyToMsgId
-        data.subject = (subject.startsWith("Re:"))
-          ? subject
-          : `Re: ${subject}`
-        data["h:In-Reply-To"] = req.body.replyToMsgId // for mailing only
-        data.threadId = threadId // for DB only
-      }
-      try {
-        data["h:Reply-To"] = req.user.email // process.env.MAILGUN_EMAIL_FROM // for mailing only
-        data["o:tracking-opens"] = "yes" // for mailing only
-        const sentMail = await mailgun.messages().send(data)
-        data.isQueuedWithMg = true
-        data.mgMsgId = sentMail.id
-      } catch (mgErr) {
-        console.log("====> MailGun err:", mgErr)
-        data.isQueuedWithMg = false
-        data.mgMsgId = null
-      }
-      data._organization = req.user._organization
-      data._candidate = req.body.candidateId
-      data._user = req.user.id
-      await Mail.create(data)
+      await sendMessage({
+        user: req.user,
+        candidate,
+        mailSubject: req.body.subject,
+        mailContent: req.body.html || req.body.text || req.body.content || req.body.body,
+        replyToMsgId: req.body.replyToMsgId
+      })
+
       return res.json({ error: false })
     } catch (error) {
       console.log(error)
