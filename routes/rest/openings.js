@@ -21,7 +21,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const openings = await Opening.find({ _organization: req.user._organization }).populate("_createdBy _skillsRequired _tags").exec()
+      const openings = await Opening.find({ _organization: req.user._organization }).populate("_createdBy _skillsRequired _tags _candidates").exec()
       return res.json({ error: false, openings })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -47,7 +47,7 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const opening = await Opening.findOne({ _id: req.params.id, _organization: req.user._organization }).populate("_createdBy _skillsRequired _tags").exec()
+      const opening = await Opening.findOne({ _id: req.params.id, _organization: req.user._organization }).populate("_createdBy _skillsRequired _tags _candidates").exec()
       if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening for you!" })
       return res.json({ error: false, opening })
     } catch (err) {
