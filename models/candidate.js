@@ -130,9 +130,9 @@ CandidateSchema.virtual("name.full").get(function () {
 })
 
 CandidateSchema.virtual("messageCount", {
+  ref: "Message",
   localField: "_id",
   foreignField: "_candidate",
-  ref: "Message",
   count: true
 })
 CandidateSchema.virtual("noteCount", {
@@ -190,6 +190,10 @@ CandidateSchema.post("find", async (docs) => {
     // eslint-disable-next-line no-await-in-loop
     await doc.populate("messageCount noteCount activities").execPopulate()
   }
+})
+/* always populate message & note counts and activities: */
+CandidateSchema.post("findOne", async (doc) => {
+  await doc.populate("messageCount noteCount activities").execPopulate()
 })
 CandidateSchema.post("save", async (doc) => {
   try {
