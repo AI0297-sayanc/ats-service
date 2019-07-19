@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema({
     ref: "Organization",
     required: true
   },
+  _createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
 
   purpose: String,
   role: String,

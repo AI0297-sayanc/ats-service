@@ -2174,17 +2174,95 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "createdAt",
-            "description": "<p>User createdAt</p>"
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>User email</p>"
           },
           {
             "group": "Parameter",
-            "type": "Date",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>User password</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "name",
+            "description": "<p>User name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name.first",
+            "description": "<p>User name.first</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
             "optional": true,
-            "field": "lastModifiedAt",
-            "description": "<p>User lastModifiedAt</p>"
+            "field": "phone",
+            "description": "<p>User phone</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "isActive",
+            "defaultValue": "true",
+            "description": "<p>User isActive</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name.last",
+            "description": "<p>User name.last</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "purpose",
+            "description": "<p>User purpose</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "role",
+            "description": "<p>User role</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "website",
+            "description": "<p>User website</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "location",
+            "description": "<p>User location</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.city",
+            "description": "<p>User location.city</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.country",
+            "description": "<p>User location.country</p>"
           }
         ]
       }
@@ -2288,17 +2366,67 @@
           },
           {
             "group": "Parameter",
-            "type": "Date",
+            "type": "String",
             "optional": true,
-            "field": "createdAt",
-            "description": "<p>User createdAt</p>"
+            "field": "phone",
+            "description": "<p>User phone</p>"
           },
           {
             "group": "Parameter",
-            "type": "Date",
+            "type": "Boolean",
             "optional": true,
-            "field": "lastModifiedAt",
-            "description": "<p>User lastModifiedAt</p>"
+            "field": "isActive",
+            "defaultValue": "true",
+            "description": "<p>User isActive</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name.last",
+            "description": "<p>User name.last</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "purpose",
+            "description": "<p>User purpose</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "role",
+            "description": "<p>User role</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "website",
+            "description": "<p>User website</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "location",
+            "description": "<p>User location</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.city",
+            "description": "<p>User location.city</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.country",
+            "description": "<p>User location.country</p>"
           }
         ]
       }

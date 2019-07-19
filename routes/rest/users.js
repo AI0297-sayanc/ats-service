@@ -20,7 +20,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const users = await User.find({}).exec()
+      const users = await User.find({ _organization: req.user._organization }).select("-password -forgotpassword").exec()
       return res.json({ error: false, users })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -46,7 +46,7 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.id }).exec()
+      const user = await User.findOne({ _id: req.params.id, _organization: req.user._organization }).select("-password -forgotpassword").exec()
       return res.json({ error: false, user })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -62,8 +62,19 @@ module.exports = {
    *
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
-   * @apiParam  {Date} [createdAt] User createdAt
-   * @apiParam  {Date} [lastModifiedAt] User lastModifiedAt
+   * @apiParam  {String} email User email
+   * @apiParam  {String} password User password
+   * @apiParam  {Object} name User name
+   * @apiParam  {String} name.first User name.first
+   * @apiParam  {String} [phone] User phone
+   * @apiParam  {Boolean} [isActive=true] User isActive
+   * @apiParam  {String} [name.last] User name.last
+   * @apiParam  {String} [purpose] User purpose
+   * @apiParam  {String} [role] User role
+   * @apiParam  {String} [website] User website
+   * @apiParam  {Object} [location] User location
+   * @apiParam  {String} [location.city] User location.city
+   * @apiParam  {String} [location.country] User location.country
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -74,11 +85,18 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        createdAt, lastModifiedAt
+        email, phone, password, isActive, name, purpose, role, website, location
       } = req.body
-      const user = await User.create({
-        createdAt, lastModifiedAt
+      if (email === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'email'" })
+      if (password === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'password'" })
+      if (name === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name'" })
+      if (name.first === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name.first'" })
+      let user = await User.create({
+        email, phone, password, isActive, name, purpose, role, website, location, _createdBy: req.user._id, _organization: req.user._organization
       })
+      user = user.toObject()
+      delete user.password
+      delete user.forgotpassword
       return res.json({ error: false, user })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -96,8 +114,15 @@ module.exports = {
    *
    * @apiParam {String} id `URL Param` The _id of the User to edit
 
-   * @apiParam  {Date} [createdAt] User createdAt
-   * @apiParam  {Date} [lastModifiedAt] User lastModifiedAt
+   * @apiParam  {String} [phone] User phone
+   * @apiParam  {Boolean} [isActive=true] User isActive
+   * @apiParam  {String} [name.last] User name.last
+   * @apiParam  {String} [purpose] User purpose
+   * @apiParam  {String} [role] User role
+   * @apiParam  {String} [website] User website
+   * @apiParam  {Object} [location] User location
+   * @apiParam  {String} [location.city] User location.city
+   * @apiParam  {String} [location.country] User location.country
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -108,15 +133,27 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        createdAt, lastModifiedAt
+        phone, password, isActive, name, purpose, role, website, location
       } = req.body
-      const user = await User.findOne({ _id: req.params.id }).exec()
-      if (user === null) return res.status(400).json({ error: true, reason: "No such User!" })
+      let user = await User.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
+      if (user === null) return res.status(400).json({ error: true, reason: "No such User in you Organization!" })
 
-      if (createdAt !== undefined) user.createdAt = createdAt
-      if (lastModifiedAt !== undefined) user.lastModifiedAt = lastModifiedAt
+      if (phone !== undefined) user.phone = phone
+      if (password !== undefined) user.password = password
+      if (isActive !== undefined) user.isActive = isActive
+      if (name !== undefined && name.first !== undefined) user.name.first = name.first
+      if (name !== undefined && name.last !== undefined) user.name.last = name.last
+      if (purpose !== undefined) user.purpose = purpose
+      if (role !== undefined) user.role = role
+      if (website !== undefined) user.website = website
+      if (location !== undefined && location.city !== undefined) user.location.city = location.city
+      if (location !== undefined && location.country !== undefined) user.location.country = location.country
+      user.lastModifiedAt = Date.now()
 
-      await user.save()
+      user = await user.save()
+      user = user.toObject()
+      delete user.password
+      delete user.forgotpassword
       return res.json({ error: false, user })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -141,7 +178,9 @@ module.exports = {
    */
   async delete(req, res) {
     try {
-      await User.deleteOne({ _id: req.params.id }).exec()
+      const cnt = await User.count({ _id: req.params.id, _organization: req.user._organization }).exec()
+      if (cnt === 0) throw new Error("No such user in your Organization!")
+      await User.deleteOne({ _id: req.params.id })
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
