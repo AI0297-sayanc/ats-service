@@ -129,6 +129,25 @@ CandidateSchema.virtual("name.full").get(function () {
   return `${first}${middle}${last}`
 })
 
+CandidateSchema.virtual("messageCount", {
+  localField: "_id",
+  foreignField: "_candidate",
+  ref: "Message",
+  count: true
+})
+CandidateSchema.virtual("noteCount", {
+  localField: "_id",
+  foreignField: "_candidate",
+  ref: "Note",
+  count: true
+})
+
+CandidateSchema.virtual("activities", {
+  localField: "_id",
+  foreignField: "_candidate",
+  ref: "Activity"
+})
+
 CandidateSchema.pre("save", async function (next) {
   const now = Date.now()
   if (!this.isNew && this.isModified("decisionStatus")) {
@@ -164,10 +183,18 @@ CandidateSchema.statics.findSimilarTo = function ({ phone = null, email = null }
   return this.find({ $or: orClause }).exec()
 }
 
-/* Send automatic accept/reject emails to candidates: */
-// eslint-disable-next-line prefer-arrow-callback
-CandidateSchema.post("save", async function (doc) {
+/* always populate message & note counts and activities: */
+CandidateSchema.post("find", async (docs) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const doc of docs) {
+    // eslint-disable-next-line no-await-in-loop
+    await doc.populate("messageCount noteCount activities").execPopulate()
+  }
+})
+CandidateSchema.post("save", async (doc) => {
   try {
+    /* always populate message & note counts and activities: */
+    await doc.populate("messageCount noteCount activities").execPopulate()
     // eslint-disable-next-line newline-per-chained-call
     const [user, opening] = await Promise.all([
       mongoose.model("User").findOne({ _id: doc._user }).populate("_organization").exec(),
