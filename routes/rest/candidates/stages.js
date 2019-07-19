@@ -1,5 +1,6 @@
 const Candidate = require("../../../models/candidate")
 const Opening = require("../../../models/opening")
+const Activity = require("../../../models/activity")
 
 module.exports = {
   /**
@@ -29,6 +30,8 @@ module.exports = {
       candidate.lastModifiedAt = Date.now()
 
       await candidate.save()
+      await Activity.create({ text: "Entered workflow stage", _candidate: candidate._id })
+
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -64,6 +67,8 @@ module.exports = {
       candidate.lastModifiedAt = Date.now()
 
       await candidate.save()
+      await Activity.create({ text: "Entered workflow stage", _candidate: candidate._id })
+
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

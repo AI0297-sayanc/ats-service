@@ -2,6 +2,7 @@ const moment = require("moment")
 
 const Event = require("../../../models/event")
 const Candidate = require("../../../models/candidate")
+const Activity = require("../../../models/activity")
 
 module.exports = {
   /**
@@ -104,9 +105,12 @@ module.exports = {
       if (!moment(start).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'start'" })
       if (end === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'end'" })
       if (!moment(end).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'end'" })
-      const event = await Event.create({
-        title, description, location, start, end, url, geo, categories, status, organizer, attendees, _candidate: candidateId, _organization: req.user._organization, _createdBy: req.user._user, _workflowStage: candidate._currentWorkflowStage
-      })
+      const event = await Promise.all([
+        Event.create({
+          title, description, location, start, end, url, geo, categories, status, organizer, attendees, _candidate: candidateId, _organization: req.user._organization, _createdBy: req.user._user, _workflowStage: candidate._currentWorkflowStage
+        }),
+        Activity.create({ text: "Interview scheduled for Candidate", _candidate: candidate._id })
+      ])
       return res.json({ error: false, event })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

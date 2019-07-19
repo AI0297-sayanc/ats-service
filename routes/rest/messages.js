@@ -2,6 +2,7 @@ const Mailgun = require("mailgun-js")
 
 const Candidate = require("../../models/candidate")
 const Mail = require("../../models/message")
+const Activity = require("../../models/activity")
 
 const mailgun = Mailgun({
   apiKey: process.env.MAILGUN_API_KEY,
@@ -40,6 +41,8 @@ module.exports = {
         replyToMsgId: req.body.replyToMsgId
       })
 
+      await Activity.create({ text: "You sent an Email", _candidate: candidate._id })
+
       return res.json({ error: false })
     } catch (error) {
       console.log(error)
@@ -72,7 +75,10 @@ module.exports = {
       data._organization = _organization
       data._candidate = _candidate
       data._user = _user
-      await Mail.create(data)
+      await Promise.all([
+        Mail.create(data),
+        Activity.create({ text: "Candidate replied to your Email", _candidate })
+      ])
     } catch (error) {
       console.log(error)
       return res.status(500).json({ error: true, reason: error.message })

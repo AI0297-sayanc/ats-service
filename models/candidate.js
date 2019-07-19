@@ -175,21 +175,25 @@ CandidateSchema.post("save", async function (doc) {
     ])
     let subject
     let content
+    const promises = []
     if (doc.wasAccepted) {
       subject = "Congrats! You are accepted!"
       content = `<p>Congrats ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Accepted.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
+      promises.push(mongoose.model("Activity").create({ text: "Candidate Accepted", _candidate: doc._id }))
     } else if (doc.wasRejected) {
       subject = "Sorry! You were rejected!"
       content = `<p>Sorry ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Rejected.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
+      promises.push(mongoose.model("Activity").create({ text: "Candidate Rejected", _candidate: doc._id }))
     }
 
-    await sendMessage({
+    promises.push(sendMessage({
       user,
       candidate: doc,
       mailSubject: subject,
       mailContent: content,
       isAuto: true
-    })
+    }))
+    await Promise.all(promises)
   } catch (error) {
     console.log("==> ERR sending automated accept/reject mail: ", error);
   }
