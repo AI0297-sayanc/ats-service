@@ -1,5 +1,6 @@
 const Candidate = require("../../../models/candidate")
 const Tag = require("../../../models/tag")
+const Opening = require("../../../models/opening")
 
 module.exports = {
 
@@ -136,6 +137,11 @@ module.exports = {
         name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills, openingId
       } = req.body
       if (openingId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'openingId'" })
+
+      const opening = await Opening.findOne({ _id: openingId, _organization: req.user._organization }).select("isActive").lean().exec()
+      if (opening === null) throw new Error("You don't have any such opening!")
+      if (opening.isActive !== true) throw new Error("Opening is not active!")
+
       if (name === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name'" })
       if (name.first === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name.first'" })
       if (name.last === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name.last'" })

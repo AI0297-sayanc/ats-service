@@ -1,4 +1,4 @@
-
+const Candidate = require("../../../models/candidate")
 const Note = require("../../../models/note.js")
 
 module.exports = {
@@ -81,6 +81,10 @@ module.exports = {
       } = req.body
       if (text === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'text'" })
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
+
+      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_id").lean().exec()
+      if (candidate === null) throw new Error("You don't have any such candidate!")
+
       const note = await Note.create({
         text, _createdBy: req.user._id, _organization: req.user._organization, _candidate: candidateId
       })
