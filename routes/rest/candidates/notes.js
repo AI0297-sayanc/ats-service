@@ -88,6 +88,7 @@ module.exports = {
       const note = await Note.create({
         text, _createdBy: req.user._id, _organization: req.user._organization, _candidate: candidateId
       })
+      await note.populate("_createdBy").execPopulate()
       return res.json({ error: false, note })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
