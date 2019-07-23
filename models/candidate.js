@@ -114,6 +114,12 @@ const CandidateSchema = new mongoose.Schema({
     default: Date.now
   },
 
+  activities: [{
+    text: { type: String, required: true },
+    _workflowStage: { type: mongoose.Schema.Types.ObjectId, ref: "WorkflowStage" },
+    when: { type: Date, default: Date.now }
+  }]
+
 })
 
 CandidateSchema.virtual("name.full").get(function () {
@@ -142,21 +148,17 @@ CandidateSchema.virtual("noteCount", {
   count: true
 })
 
-CandidateSchema.virtual("activities", {
-  localField: "_id",
-  foreignField: "_candidate",
-  ref: "Activity"
-})
-
 CandidateSchema.pre("save", async function (next) {
   const now = Date.now()
   if (!this.isNew && this.isModified("decisionStatus")) {
     if (this.decisionStatus === "rejected") {
       this.wasRejected = true // for usage in post hooks below
       this.rejectedAt = now
+      this.activities.push({ text: "Candidate Accepted", _workflowStage: this._currentWorkflowStage, when: Date.now() })
     } else if (this.decisionStatus === "accepted") {
       this.wasAccepted = true // for usage in post hooks below
       this.acceptedAt = now
+      this.activities.push({ text: "Candidate Rejected", _workflowStage: this._currentWorkflowStage, when: Date.now() })
     }
   }
   this.lastModifiedAt = now
@@ -188,17 +190,17 @@ CandidateSchema.post("find", async (docs) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const doc of docs) {
     // eslint-disable-next-line no-await-in-loop
-    await doc.populate("messageCount noteCount activities").execPopulate()
+    await doc.populate("messageCount noteCount").execPopulate()
   }
 })
 /* always populate message & note counts and activities: */
 CandidateSchema.post("findOne", async (doc) => {
-  await doc.populate("messageCount noteCount activities").execPopulate()
+  await doc.populate("messageCount noteCount").execPopulate()
 })
 CandidateSchema.post("save", async (doc) => {
   try {
     /* always populate message & note counts and activities: */
-    await doc.populate("messageCount noteCount activities").execPopulate()
+    await doc.populate("messageCount noteCount").execPopulate()
     // eslint-disable-next-line newline-per-chained-call
     const [user, opening] = await Promise.all([
       mongoose.model("User").findOne({ _id: doc._user }).populate("_organization").exec(),
@@ -206,25 +208,23 @@ CandidateSchema.post("save", async (doc) => {
     ])
     let subject
     let content
-    const promises = []
     if (doc.wasAccepted) {
       subject = "Congrats! You are accepted!"
       content = `<p>Congrats ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Accepted.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
-      promises.push(mongoose.model("Activity").create({ text: "Candidate Accepted", _candidate: doc._id }))
+      // promises.push(mongoose.model("Activity").create({ text: "Candidate Accepted", _candidate: doc._id }))
     } else if (doc.wasRejected) {
       subject = "Sorry! You were rejected!"
       content = `<p>Sorry ${doc.name.first},</p><p>Your application for <b>${opening.title}</b> was Rejected.</p><p>You may reply to this email for further details.</p><br/><p>--Thanks,<br/>${user.name.full}<br/>(${user._organization.title})</p>`
-      promises.push(mongoose.model("Activity").create({ text: "Candidate Rejected", _candidate: doc._id }))
+      // promises.push(mongoose.model("Activity").create({ text: "Candidate Rejected", _candidate: doc._id }))
     }
 
-    promises.push(sendMessage({
+    await sendMessage({
       user,
       candidate: doc,
       mailSubject: subject,
       mailContent: content,
       isAuto: true
-    }))
-    await Promise.all(promises)
+    })
   } catch (error) {
     console.log("==> ERR sending automated accept/reject mail: ", error);
   }

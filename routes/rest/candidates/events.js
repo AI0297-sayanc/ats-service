@@ -96,7 +96,7 @@ module.exports = {
         candidateId, title, description, location, start, end, url, geo, categories, status, organizer, attendees
       } = req.body
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
-      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_currentWorkflowStage").exec()
+      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_currentWorkflowStage activities").exec()
       if (candidate === null) throw new Error("No such candidate for you!")
 
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })
@@ -105,11 +105,14 @@ module.exports = {
       if (!moment(start).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'start'" })
       if (end === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'end'" })
       if (!moment(end).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'end'" })
-      const event = await Promise.all([
+
+      candidate.activities.push({ text: "Interview scheduled for Candidate", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
+
+      const [event, __c] = await Promise.all([
         Event.create({
           title, description, location, start, end, url, geo, categories, status, organizer, attendees, _candidate: candidateId, _organization: req.user._organization, _createdBy: req.user._user, _workflowStage: candidate._currentWorkflowStage
         }),
-        Activity.create({ text: "Interview scheduled for Candidate", _candidate: candidate._id })
+        candidate.save()
       ])
       return res.json({ error: false, event })
     } catch (err) {

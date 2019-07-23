@@ -29,9 +29,9 @@ module.exports = {
       candidate._currentWorkflowStage = nextStage
       candidate.lastModifiedAt = Date.now()
 
-      await candidate.save()
-      await Activity.create({ text: "Entered workflow stage", _candidate: candidate._id })
+      candidate.activities.push({ text: "Entered workflow stage", _workflowStage: candidate._currentWorkflowStage, when: candidate.lastModifiedAt })
 
+      await candidate.save()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -66,9 +66,9 @@ module.exports = {
       candidate._currentWorkflowStage = stageId
       candidate.lastModifiedAt = Date.now()
 
-      await candidate.save()
-      await Activity.create({ text: "Entered workflow stage", _candidate: candidate._id })
+      candidate.activities.push({ text: "Entered workflow stage", _workflowStage: candidate._currentWorkflowStage, when: candidate.lastModifiedAt })
 
+      await candidate.save()
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

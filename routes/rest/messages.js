@@ -42,7 +42,8 @@ module.exports = {
         replyToMsgId: req.body.replyToMsgId
       })
 
-      await Activity.create({ text: "You sent an Email", _candidate: candidate._id })
+      candidate.activities.push({ text: "You sent an Email", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
+      await candidate.save()
 
       return res.json({ error: false })
     } catch (error) {
@@ -76,9 +77,13 @@ module.exports = {
       data._organization = _organization
       data._candidate = _candidate
       data._user = _user
+
+      const candidate = await Candidate.findOne({ _id: _candidate }).select("_currentWorkflowStage activities").exec()
+      candidate.activities.push({ text: "Candidate replied to your Email", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
+
       await Promise.all([
         Mail.create(data),
-        Activity.create({ text: "Candidate replied to your Email", _candidate })
+        candidate.save()
       ])
     } catch (error) {
       console.log(error)
