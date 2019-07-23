@@ -24,30 +24,26 @@ const MessageSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Candidate"
   },
-  candidateName: { type: String, default: null }, // redundancy; set in hooks below
+  fromName: { type: String, default: null }, // redundancy; set in hooks below
+  fromEmail: { type: String, default: null }, // redundancy; set in hooks below
   _user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
-  userName: { type: String, default: null }, // redundancy; set in hooks below
+  toName: { type: String, default: null }, // redundancy; set in hooks below
+  toEmail: { type: String, default: null }, // redundancy; set in hooks below
 
 })
 
-// eslint-disable-next-line prefer-arrow-callback
+/* eslint-disable-next-line prefer-arrow-callback */
 MessageSchema.pre("save", async function (next) {
-  try {
-    const [user, candidate] = await Promise.all([
-    /* eslint-disable newline-per-chained-call */
-      mongoose.model("User").findOne({ _id: this._user }).select("name").lean().exec(),
-      mongoose.model("Candidate").findOne({ _id: this._candidate }).select("name").exec(),
-    ])
-    this.userName = (user !== null) ? user.name.full : null
-    this.candidateName = (candidate !== null) ? candidate.name.full : null
-  } catch (error) {
-    console.log("Couldn't set user/candidate name for message!", error);
-  }
+  this.fromName = this.from.split("<").shift().trim()
+  this.toName = this.to.split("<").shift().trim()
+  this.fromEmail = this.from.split("<").pop().replace(">", "").trim()
+  this.toEmail = this.to.split("<").pop().replace(">", "").trim()
   return next()
 })
+/* eslint-disable prefer-arrow-callback */
 
 MessageSchema.set("toJSON", { virtuals: true })
 MessageSchema.set("toObject", { virtuals: true })
