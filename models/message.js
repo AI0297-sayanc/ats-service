@@ -39,7 +39,7 @@ MessageSchema.pre("save", async function (next) {
     const [user, candidate] = await Promise.all([
     /* eslint-disable newline-per-chained-call */
       mongoose.model("User").findOne({ _id: this._user }).select("name").lean().exec(),
-      mongoose.model("Candidate").findOne({ _id: this._candidate }).select("name").lean().exec(),
+      mongoose.model("Candidate").findOne({ _id: this._candidate }).select("name").exec(),
     ])
     this.userName = (user !== null) ? user.name.full : null
     this.candidateName = (candidate !== null) ? candidate.name.full : null

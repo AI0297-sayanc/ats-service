@@ -46,7 +46,7 @@ const ActivitySchema = new mongoose.Schema({
 ActivitySchema.pre("save", async function (next) {
   try {
     // eslint-disable-next-line newline-per-chained-call
-    const candidate = await mongoose.model("Candidate").findOne({ _id: this._candidate }).select("_currentWorkflowStage").lean().exec()
+    const candidate = await mongoose.model("Candidate").findOne({ _id: this._candidate }).select("_currentWorkflowStage").exec()
     if (candidate === null) throw new Error("No such candidate!")
     this._workflowStage = candidate._currentWorkflowStage
   } catch (err) {

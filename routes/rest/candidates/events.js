@@ -96,7 +96,7 @@ module.exports = {
         candidateId, title, description, location, start, end, url, geo, categories, status, organizer, attendees
       } = req.body
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
-      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_currentWorkflowStage").lean().exec()
+      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_currentWorkflowStage").exec()
       if (candidate === null) throw new Error("No such candidate for you!")
 
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })

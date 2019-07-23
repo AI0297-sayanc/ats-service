@@ -82,7 +82,7 @@ module.exports = {
       if (text === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'text'" })
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
 
-      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_id").lean().exec()
+      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_id").exec()
       if (candidate === null) throw new Error("You don't have any such candidate!")
 
       const note = await Note.create({
