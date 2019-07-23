@@ -456,7 +456,7 @@ define({ "api": [
     "groupTitle": "CandidateEvent"
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/messages",
     "title": "Get list of all email messages to a candidate, grouped by threads",
     "name": "getMessages",

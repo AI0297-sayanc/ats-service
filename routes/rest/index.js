@@ -61,7 +61,7 @@ router.get("/widget/organization/apikey", widgets.getApiKey)
 router.get("/widget/organization/code", widgets.getWidgetCode)
 
 router.post("/message/send", messages.post)
-router.get("/messages", messages.get)
+router.post("/messages", messages.get)
 
 router.post("/import/openings", upload.single("csv-file"), dataImports.openings)
 router.post("/import/candidates", upload.single("csv-file"), dataImports.candidates)

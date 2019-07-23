@@ -114,7 +114,7 @@ module.exports = {
   },
 
   /**
-  * @api {GET} /messages Get list of all email messages to a candidate, grouped by threads
+  * @api {POST} /messages Get list of all email messages to a candidate, grouped by threads
   * @apiName getMessages
   * @apiGroup CandidateMessage
   * @apiPermission User
