@@ -3,7 +3,6 @@ const mongoose = require("mongoose")
 
 const Candidate = require("../../models/candidate")
 const Mail = require("../../models/message")
-const Activity = require("../../models/activity")
 
 const mailgun = Mailgun({
   apiKey: process.env.MAILGUN_API_KEY,
@@ -42,7 +41,7 @@ module.exports = {
         replyToMsgId: req.body.replyToMsgId
       })
 
-      candidate.activities.push({ text: "You sent an Email", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
+      candidate.activities.push({ text: `${req.user.fullName} sent an Email`, _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
       await candidate.save()
 
       return res.json({ error: false })
@@ -79,7 +78,7 @@ module.exports = {
       data._user = _user
 
       const candidate = await Candidate.findOne({ _id: _candidate }).select("_currentWorkflowStage activities").exec()
-      candidate.activities.push({ text: "Candidate replied to your Email", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
+      candidate.activities.push({ text: "Candidate replied to an Email", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
 
       await Promise.all([
         Mail.create(data),

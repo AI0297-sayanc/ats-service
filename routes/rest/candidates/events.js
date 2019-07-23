@@ -2,7 +2,6 @@ const moment = require("moment")
 
 const Event = require("../../../models/event")
 const Candidate = require("../../../models/candidate")
-const Activity = require("../../../models/activity")
 
 module.exports = {
   /**

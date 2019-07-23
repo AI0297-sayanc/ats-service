@@ -1,6 +1,5 @@
 const Candidate = require("../../../models/candidate")
-const Opening = require("../../../models/opening")
-const Activity = require("../../../models/activity")
+// const Opening = require("../../../models/opening")
 
 module.exports = {
   /**
