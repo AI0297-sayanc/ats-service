@@ -11,7 +11,10 @@ const MessageSchema = new mongoose.Schema({
   threadId: { type: String, default: cuid },
   isQueuedWithMg: { type: Boolean },
   createdAt: { type: Date, default: Date.now },
-  isOpened: { type: Boolean },
+
+  isDelivered: { type: Boolean, default: false },
+  deliveredAt: { type: Date },
+  isOpened: { type: Boolean, default: false },
   openedAt: { type: Date },
 
   isAuto: { type: Boolean, default: false },

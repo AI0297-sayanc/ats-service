@@ -55,7 +55,7 @@ module.exports = {
     }
   },
 
-  /** Webhook */
+  /** Mailgun Routes Handler */
   async replyReceived(req, res) {
     const { headers, body } = req
     // console.log("***********", headers, body);
@@ -95,9 +95,9 @@ module.exports = {
     return res.json({ headers, body })
   },
 
-  /** Webhook */
-  async opened(req, res) {
-    const { headers, body } = req
+  /** Mailgun Webhook Handler */
+  async delivered(req, res) {
+    const { body } = req
     // console.log("***********", headers, body);
     if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
       console.error("ERR: Request came, but not from Mailgun")
@@ -105,6 +105,34 @@ module.exports = {
     }
     try {
       const data = body["event-data"]
+      if (data.event !== "delivered") return res.status(200).send("WRONG EVENT") // fail gracefully!
+      const mgMsgId = `<${data.message.headers["message-id"]}>`
+      await Mail.updateOne(
+        { mgMsgId },
+        { isDelivered: true, deliveredAt: Math.ceil(body.signature.timestamp) * 1000 }
+      )
+      // pub.publish("mail-opened", JSON.stringify({
+      //   mgMsgId,
+      //   openedAt: Math.ceil(body.signature.timestamp) * 1000
+      // }))
+      return res.send("OK")
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ error: true, reason: error.message })
+    }
+  },
+
+  /** Mailgun Webhook Handler */
+  async opened(req, res) {
+    const { body } = req
+    // console.log("***********", headers, body);
+    if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
+      console.error("ERR: Request came, but not from Mailgun")
+      return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
+    }
+    try {
+      const data = body["event-data"]
+      if (data.event !== "opened") return res.status(200).send("WRONG EVENT") // fail gracefully!
       const mgMsgId = `<${data.message.headers["message-id"]}>`
       await Mail.updateOne(
         { mgMsgId },
