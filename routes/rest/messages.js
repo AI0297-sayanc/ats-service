@@ -21,7 +21,7 @@ const { sendMessage, fetchMessageThreads } = require("../../lib/message")
 
 module.exports = {
   /**
-  * @api {POST} /message/send Send a message to a candidate.
+  * @api {POST} /message/send 1.0 Send a message to a candidate.
   * @apiName sendMessage
   * @apiGroup CandidateMessage
   * @apiPermission User
@@ -159,7 +159,7 @@ module.exports = {
   },
 
   /**
-  * @api {POST} /messages Get list of all email messages to a candidate, grouped by threads
+  * @api {POST} /messages 2.0 Get list of all email messages to a candidate, grouped by threads
   * @apiName getMessages
   * @apiGroup CandidateMessage
   * @apiPermission User

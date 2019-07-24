@@ -452,7 +452,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/messages",
-    "title": "Get list of all email messages to a candidate, grouped by threads",
+    "title": "2.0 Get list of all email messages to a candidate, grouped by threads",
     "name": "getMessages",
     "group": "CandidateMessage",
     "permission": [
@@ -497,7 +497,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/message/send",
-    "title": "Send a message to a candidate.",
+    "title": "1.0 Send a message to a candidate.",
     "name": "sendMessage",
     "group": "CandidateMessage",
     "permission": [
@@ -612,7 +612,7 @@ define({ "api": [
   {
     "type": "delete",
     "url": "/note/:id",
-    "title": "4.0 Delete a Note by _id",
+    "title": "5.0 Delete a Note by _id",
     "name": "deleteNote",
     "group": "CandidateNote",
     "permission": [
@@ -695,17 +695,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "createdAt",
-            "description": "<p>Note createdAt</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "lastModifiedAt",
-            "description": "<p>Note lastModifiedAt</p>"
+            "type": "String",
+            "optional": false,
+            "field": "text",
+            "description": "<p>Note text</p>"
           }
         ]
       }

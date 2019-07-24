@@ -110,9 +110,7 @@ module.exports = {
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
    * @apiParam {String} id `URL Param` The _id of the Note to edit
-
-   * @apiParam  {Date} [createdAt] Note createdAt
-   * @apiParam  {Date} [lastModifiedAt] Note lastModifiedAt
+   * @apiParam  {String} text Note text
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -140,7 +138,7 @@ module.exports = {
 
   /**
    * Delete a Note by _id
-   * @api {delete} /note/:id 4.0 Delete a Note by _id
+   * @api {delete} /note/:id 5.0 Delete a Note by _id
    * @apiName deleteNote
    * @apiGroup CandidateNote
    * @apiPermission User
