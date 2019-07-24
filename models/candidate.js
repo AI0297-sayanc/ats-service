@@ -218,13 +218,15 @@ CandidateSchema.post("save", async (doc) => {
       // promises.push(mongoose.model("Activity").create({ text: "Candidate Rejected", _candidate: doc._id }))
     }
 
-    await sendMessage({
-      user,
-      candidate: doc,
-      mailSubject: subject,
-      mailContent: content,
-      isAuto: true
-    })
+    if (doc.wasAccepted || doc.wasRejected) {
+      await sendMessage({
+        user,
+        candidate: doc,
+        mailSubject: subject,
+        mailContent: content,
+        isAuto: true
+      })
+    }
   } catch (error) {
     console.log("==> ERR sending automated accept/reject mail: ", error);
   }

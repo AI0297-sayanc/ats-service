@@ -68,15 +68,17 @@ EventSchema.post("save", async function (doc) {
       categories: doc.categories,
       status: doc.status || "CONFIRMED",
       organizer: doc.organizer,
-      attendees: doc.attendees
+      attendees: doc.attendees.map(a => ({ name: a.name, email: a.email }))
     }
     const { error, value } = ics.createEvent(event)
     if (error) throw error
 
-    mailer("interview-scheduled", {
+    console.log(doc.organizer);
+
+    mailer("interview-schedule", {
       to: [doc.organizer.email, ...doc.attendees.map(a => a.email).filter(a => a !== undefined)],
       subject: event.title,
-      locals: { text: event.description },
+      locals: { event },
       attachments: [
         {
           filename: "invite.ics",
