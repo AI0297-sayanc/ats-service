@@ -1,5 +1,4 @@
 const Mailgun = require("mailgun-js")
-const mongoose = require("mongoose")
 
 const Candidate = require("../../models/candidate")
 const Mail = require("../../models/message")
@@ -9,7 +8,7 @@ const mailgun = Mailgun({
   domain: process.env.MAILGUN_DOMAIN
 })
 
-const { sendMessage } = require("../../lib/message")
+const { sendMessage, fetchMessageThreads } = require("../../lib/message")
 
 module.exports = {
   /**
@@ -133,19 +132,7 @@ module.exports = {
   async get(req, res) {
     if (req.body.candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'candidateId'" })
     try {
-      const matcher = { _organization: mongoose.Types.ObjectId(req.user._organization), _candidate: mongoose.Types.ObjectId(req.body.candidateId) }
-      if (req.body.showMyMailsOnly === true) matcher._user = mongoose.Types.ObjectId(req.user.id)
-      const threads = await Mail.aggregate([
-        { $match: matcher },
-        { $sort: { createdAt: 1 } },
-        {
-          $group: {
-            _id: "$threadId",
-            messages: { $push: "$$ROOT" },
-            messagesCount: { $sum: 1 }
-          }
-        }
-      ]).exec()
+      const threads = await fetchMessageThreads(req.body.candidateId, req.user, req.body.showMyMailsOnly)
       return res.json({ error: false, threads })
     } catch (error) {
       return res.status(500).json({ error: true, reason: error.message })
