@@ -73,8 +73,6 @@ EventSchema.post("save", async function (doc) {
     const { error, value } = ics.createEvent(event)
     if (error) throw error
 
-    console.log(doc.organizer);
-
     mailer("interview-schedule", {
       to: [doc.organizer.email, ...doc.attendees.map(a => a.email).filter(a => a !== undefined)],
       subject: event.title,
