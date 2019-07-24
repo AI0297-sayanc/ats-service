@@ -1,4 +1,5 @@
 const Mailgun = require("mailgun-js")
+const Pusher = require("pusher")
 
 const Candidate = require("../../models/candidate")
 const Mail = require("../../models/message")
@@ -6,6 +7,14 @@ const Mail = require("../../models/message")
 const mailgun = Mailgun({
   apiKey: process.env.MAILGUN_API_KEY,
   domain: process.env.MAILGUN_DOMAIN
+})
+
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  encrypted: true
 })
 
 const { sendMessage, fetchMessageThreads } = require("../../lib/message")
@@ -107,14 +116,14 @@ module.exports = {
       const data = body["event-data"]
       if (data.event !== "delivered") return res.status(200).send("WRONG EVENT") // fail gracefully!
       const mgMsgId = `<${data.message.headers["message-id"]}>`
+      const deliveredAt = Math.ceil(body.signature.timestamp) * 1000
       await Mail.updateOne(
         { mgMsgId },
-        { isDelivered: true, deliveredAt: Math.ceil(body.signature.timestamp) * 1000 }
-      )
-      // pub.publish("mail-opened", JSON.stringify({
-      //   mgMsgId,
-      //   openedAt: Math.ceil(body.signature.timestamp) * 1000
-      // }))
+        { isDelivered: true, deliveredAt }
+      ).exec()
+      // real time notif:
+      pusher.trigger("email-messages", "delivered", { mgMsgId, deliveredAt })
+
       return res.send("OK")
     } catch (error) {
       console.log(error)
@@ -134,14 +143,14 @@ module.exports = {
       const data = body["event-data"]
       if (data.event !== "opened") return res.status(200).send("WRONG EVENT") // fail gracefully!
       const mgMsgId = `<${data.message.headers["message-id"]}>`
+      const openedAt = Math.ceil(body.signature.timestamp) * 1000
       await Mail.updateOne(
         { mgMsgId },
-        { isOpened: true, openedAt: Math.ceil(body.signature.timestamp) * 1000 }
-      )
-      // pub.publish("mail-opened", JSON.stringify({
-      //   mgMsgId,
-      //   openedAt: Math.ceil(body.signature.timestamp) * 1000
-      // }))
+        { isOpened: true, openedAt }
+      ).exec()
+      // real time notif:
+      pusher.trigger("email-messages", "opened", { mgMsgId, openedAt })
+
       return res.send("OK")
     } catch (error) {
       console.log(error)
