@@ -549,7 +549,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response: 200 OK",
-          "content": "{\n    error : false\n}",
+          "content": "{\n    error : false,\n    threads: [{}]\n}",
           "type": "type"
         }
       ]

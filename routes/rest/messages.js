@@ -23,7 +23,8 @@ module.exports = {
   * @apiParam  {String} [replyToMsgId] Mailgun message ID to reply to. If specified, implies that this is continuation of an existing message thread.
   * @apiSuccessExample {type} Success-Response: 200 OK
   * {
-  *     error : false
+  *     error : false,
+  *     threads: [{}]
   * }
   */
   async post(req, res) {
@@ -41,9 +42,13 @@ module.exports = {
       })
 
       candidate.activities.push({ text: `${req.user.fullName} sent an Email`, _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
-      await candidate.save()
 
-      return res.json({ error: false })
+      const [threads, __c] = await Promise.all([
+        fetchMessageThreads(candidate._id, req.user, false),
+        candidate.save()
+      ])
+
+      return res.json({ error: false, threads })
     } catch (error) {
       console.log(error)
       return res.status(500).json({ error: true, reason: error.message })
