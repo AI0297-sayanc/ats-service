@@ -14,13 +14,13 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  location: String,
+  // location: String,
   start: Date,
   end: Date,
   // duration: { hours: 6, minutes: 30 },
-  url: String,
-  geo: { lat: Number, lon: Number },
-  categories: [String],
+  // url: String,
+  // geo: { lat: Number, lon: Number },
+  // categories: [String],
   status: String,
   organizer: { name: String, email: String },
   attendees: [
