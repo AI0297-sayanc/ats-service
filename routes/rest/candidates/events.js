@@ -77,11 +77,10 @@ module.exports = {
    * @apiParam  {Number} [geo.lat] Event geo.lat
    * @apiParam  {Number} [geo.lon] Event geo.lon
    * @apiParam  {String[]} [categories] Event categories
-   * @apiParam  {String} [status] Event status
-   * @apiParam  {Object} [organizer] Event organizer
-   * @apiParam  {String} [organizer.name] Event organizer.name
-   * @apiParam  {String} [organizer.email] Event organizer.email
-   * @apiParam  {undefined[]} [attendees] Event attendees
+   * @apiParam  {String} [status="CONFIRMED"] Event status
+   * @apiParam  {Object[]} [extraAttendees[]] Array of Event attendees besides the candidate itself
+   * @apiParam  {String} [extraAttendees.name] Name of an extra attendee
+   * @apiParam  {String} [extraAttendees.email] Email of an extra attendee
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -92,10 +91,10 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        candidateId, title, description, location, start, end, url, geo, categories, status, organizer, attendees
+        candidateId, title, description, location, start, end, url, geo, categories, status, extraAttendees
       } = req.body
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
-      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).select("_currentWorkflowStage activities").exec()
+      const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).exec()
       if (candidate === null) throw new Error("No such candidate for you!")
 
       if (title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'title'" })
@@ -104,6 +103,18 @@ module.exports = {
       if (!moment(start).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'start'" })
       if (end === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'end'" })
       if (!moment(end).isValid()) return res.status(400).json({ error: true, reason: "Invalid date in field 'end'" })
+
+      const organizer = {
+        name: req.user.fullName,
+        email: req.user.email
+      }
+      const attendees = [{
+        name: candidate.name.full,
+        email: candidate.email
+      }]
+      if (Array.isArray(extraAttendees)) {
+        attendees.push(...extraAttendees)
+      }
 
       candidate.activities.push({ text: "Interview scheduled for Candidate", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
 

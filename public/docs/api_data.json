@@ -309,35 +309,29 @@
             "type": "String",
             "optional": true,
             "field": "status",
+            "defaultValue": "CONFIRMED",
             "description": "<p>Event status</p>"
           },
           {
             "group": "Parameter",
-            "type": "Object",
+            "type": "Object[]",
             "optional": true,
-            "field": "organizer",
-            "description": "<p>Event organizer</p>"
+            "field": "extraAttendees[]",
+            "description": "<p>Array of Event attendees besides the candidate itself</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "organizer.name",
-            "description": "<p>Event organizer.name</p>"
+            "field": "extraAttendees.name",
+            "description": "<p>Name of an extra attendee</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "organizer.email",
-            "description": "<p>Event organizer.email</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "undefined[]",
-            "optional": true,
-            "field": "attendees",
-            "description": "<p>Event attendees</p>"
+            "field": "extraAttendees.email",
+            "description": "<p>Email of an extra attendee</p>"
           }
         ]
       }

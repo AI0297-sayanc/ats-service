@@ -73,14 +73,8 @@ EventSchema.post("save", async function (doc) {
     const { error, value } = ics.createEvent(event)
     if (error) throw error
 
-    const [user, candidate] = await Promise.all([
-      /* eslint-disable newline-per-chained-call */
-      mongoose.model("User").findOne({ _id: doc._user }).select("name email").lean().exec(),
-      mongoose.model("Candidate").findOne({ _id: doc._candidate }).select("name email").lean().exec(),
-    ])
-
     mailer("interview-scheduled", {
-      to: [user.email, candidate.email],
+      to: [doc.organizer.email, ...doc.attendees.map(a => a.email).filter(a => a !== undefined)],
       subject: event.title,
       locals: { text: event.description },
       attachments: [
