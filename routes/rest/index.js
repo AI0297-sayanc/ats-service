@@ -87,5 +87,6 @@ router.post("/event", events.post)
 
 router.put("/candidate/nextstage/:id", stages.nextStage)
 router.put("/candidate/movetostage/:id", stages.moveToStage)
+router.put("/candidate/decision/:id", stages.changeDecisionStatus)
 
 module.exports = router

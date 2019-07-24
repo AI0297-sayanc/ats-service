@@ -83,7 +83,7 @@ const CandidateSchema = new mongoose.Schema({
 
   decisionStatus: {
     type: String,
-    enum: ["pending", "rejected", "accepted"],
+    enum: ["pending", "rejected", "accepted", "on-hold"],
     default: "pending"
   },
 

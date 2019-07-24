@@ -73,4 +73,44 @@ module.exports = {
       return res.status(500).json({ error: true, reason: err.message })
     }
   },
+
+  /**
+   * Set Decision Status for a Candidate
+   * @api {put} /candidate/decision/:id 6.3. Set Decision Status for a Candidate
+   * @apiName decisionStatus
+   * @apiGroup Candidate
+   * @apiPermission User
+   *
+   * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
+   *
+   * @apiParam {String} id `URL Param` The _id of the Candidate
+   * @apiParam {String} decisionStatus The decision status to be set `enum["pending", "rejected", "accepted", "on-hold"]`
+   * @apiParam {String} [rejectionReason] Rejection reason [MANDATORY if decision == "rejected"]
+   *
+   */
+  async changeDecisionStatus(req, res) {
+    const { decisionStatus, rejectionReason } = req.body
+    if (!["pending", "rejected", "accepted", "on-hold"].includes(decisionStatus)) return res.status(400).json({ error: true, reason: "Field 'decisionStatus' is mandatory & must be one of 'pending', 'rejected', 'accepted', 'on-hold'" })
+    if (decisionStatus === "rejected" && rejectionReason === undefined) return res.status(400).json({ error: true, reason: "Field 'rejectionReason' is mandatory if 'decisionStatus' is 'rejected'" })
+    try {
+      const candidate = await Candidate
+        .findOne({ _id: req.params.id, _organization: req.user._organization })
+        .exec()
+      if (candidate === null) return res.status(400).json({ error: true, reason: "You don't have any such candidate!" })
+
+      candidate.decisionStatus = decisionStatus
+      candidate.lastModifiedAt = Date.now()
+      if (decisionStatus === "rejected") {
+        candidate.rejectionReason = rejectionReason
+        candidate.rejectedAt = candidate.lastModifiedAt
+      }
+
+      candidate.activities.push({ text: `Candidate's status changed to ${decisionStatus}`, _workflowStage: candidate._currentWorkflowStage, when: candidate.lastModifiedAt })
+
+      await candidate.save()
+      return res.json({ error: false })
+    } catch (err) {
+      return res.status(500).json({ error: true, reason: err.message })
+    }
+  },
 }
