@@ -112,8 +112,8 @@ module.exports = {
         name: candidate.name.full,
         email: candidate.email
       }]
-      if (Array.isArray(extraAttendees)) {
-        attendees.push(...extraAttendees)
+      if (Array.isArray(extraAttendees) && extraAttendees.length > 0) {
+        attendees.push(...extraAttendees.filter(a => a.name && a.email && a.name.trim() !== "" && a.email.trim() !== ""))
       }
 
       candidate.activities.push({ text: "Interview scheduled for Candidate", _workflowStage: candidate._currentWorkflowStage, when: Date.now() })
