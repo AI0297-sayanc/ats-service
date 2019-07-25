@@ -70,10 +70,12 @@ EventSchema.post("save", async function (doc) {
     const { error, value } = ics.createEvent(event)
     if (error) throw error
 
+    const candidate = await mongoose.model("Candidate").findOne({ _id: doc._candidate }).populate("_opening").exec()
+
     mailer("interview-schedule", {
       to: [doc.organizer.email, ...doc.attendees.map(a => a.email).filter(a => a !== undefined)],
       subject: event.title,
-      locals: { event },
+      locals: { event, candidate },
       attachments: [
         {
           filename: "invite.ics",
