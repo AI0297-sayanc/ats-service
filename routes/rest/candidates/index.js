@@ -43,7 +43,7 @@ module.exports = {
     try {
       const candidates = await Candidate
         .find(queryObj)
-        .populate("_skills _currentWorkflowStage _organization _createdBy")
+        .populate("_skills _tags _currentWorkflowStage _organization _createdBy")
         .populate({
           path: "_opening",
           populate: {
@@ -78,7 +78,7 @@ module.exports = {
     try {
       const candidate = await Candidate
         .findOne({ _id: req.params.id, _organization: req.user._organization })
-        .populate("_skills _currentWorkflowStage _organization _createdBy")
+        .populate("_skills _tags _currentWorkflowStage _organization _createdBy")
         .populate({
           path: "_opening",
           populate: {
@@ -124,6 +124,7 @@ module.exports = {
    * @apiParam  {String} [source] Candidate source
    * @apiParam  {String} [expectedSalary] Candidate expectedSalary
    * @apiParam  {String[]} [skills] Array of skills
+   * @apiParam  {String[]} [tags] Array of candidate tags
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -134,7 +135,7 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills, openingId
+        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills, tags, openingId
       } = req.body
       if (openingId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'openingId'" })
 
@@ -147,9 +148,12 @@ module.exports = {
       if (name.last === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name.last'" })
       if (email === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'email'" })
       if (phone === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'phone'" })
-      const _skills = await Tag.batchUpsert("skill", skills)
+      const [_skills, _tags] = await Promise.all([
+        Tag.batchUpsert("skill", skills),
+        Tag.batchUpsert("candidate", tags)
+      ])
       const candidate = await Candidate.create({
-        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, _skills, _organization: req.user._organization, _opening: openingId, _createdBy: req.user._id
+        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, _skills, _tags, _organization: req.user._organization, _opening: openingId, _createdBy: req.user._id
       })
       return res.json({ error: false, candidate })
     } catch (err) {
@@ -184,6 +188,7 @@ module.exports = {
    * @apiParam  {String} [source] Candidate source
    * @apiParam  {String} [expectedSalary] Candidate expectedSalary
    * @apiParam  {String[]} [skills] Array of skills
+   * @apiParam  {String[]} [tags] Array of candidate tags
    *
    * @apiSuccessExample {type} Success-Response: 200 OK
    * {
@@ -194,7 +199,7 @@ module.exports = {
   async put(req, res) {
     try {
       const {
-        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills
+        name, email, altEmail, phone, cvLink, currentEmployer, currentPosition, currentSalary, currentLocation, noticePeriod, availableFrom, yearsOfExperience, highestEducationalQualification, experienceSummary, portfolio, source, expectedSalary, skills, tags
       } = req.body
       const candidate = await Candidate.findOne({ _id: req.params.id, _organization: req.user._organization }).exec()
       if (candidate === null) return res.status(400).json({ error: true, reason: "You don't have any such candidate!" })
@@ -218,8 +223,11 @@ module.exports = {
       if (portfolio !== undefined) candidate.portfolio = portfolio
       if (source !== undefined) candidate.source = source
       if (expectedSalary !== undefined) candidate.expectedSalary = expectedSalary
-      if (skills !== undefined && Array.isArray(skills)) {
+      if (Array.isArray(skills)) {
         candidate._skills = await Tag.batchUpsert("skill", skills)
+      }
+      if (Array.isArray(tags)) {
+        candidate._tags = await Tag.batchUpsert("candidate", tags)
       }
 
       candidate.lastModifiedAt = Date.now()

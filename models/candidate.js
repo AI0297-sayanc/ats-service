@@ -52,6 +52,11 @@ const CandidateSchema = new mongoose.Schema({
     ref: "Tag"
   }],
 
+  _tags: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tag"
+  }],
+
   yearsOfExperience: {
     type: Number,
     min: 0,

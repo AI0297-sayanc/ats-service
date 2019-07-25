@@ -171,10 +171,10 @@ module.exports = {
       if (minEducationalQualification !== undefined) opening.minEducationalQualification = minEducationalQualification
       if (jobLevel !== undefined) opening.jobLevel = jobLevel
       if (jobCode !== undefined) opening.jobCode = jobCode
-      if (skillsRequired !== undefined && Array.isArray(skillsRequired)) {
+      if (Array.isArray(skillsRequired)) {
         opening._skillsRequired = await Tag.batchUpsert("skill", skillsRequired)
       }
-      if (tags !== undefined && Array.isArray(tags)) {
+      if (Array.isArray(tags)) {
         opening._tags = await Tag.batchUpsert("opening", tags)
       }
       if (workflowStages !== undefined && Array.isArray(workflowStages)) {

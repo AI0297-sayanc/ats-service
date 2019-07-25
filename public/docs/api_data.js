@@ -962,6 +962,13 @@ define({ "api": [
             "optional": true,
             "field": "skills",
             "description": "<p>Array of skills</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": true,
+            "field": "tags",
+            "description": "<p>Array of candidate tags</p>"
           }
         ]
       }
@@ -1230,6 +1237,13 @@ define({ "api": [
             "optional": true,
             "field": "skills",
             "description": "<p>Array of skills</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": true,
+            "field": "tags",
+            "description": "<p>Array of candidate tags</p>"
           }
         ]
       }
