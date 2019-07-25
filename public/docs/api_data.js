@@ -1697,6 +1697,14 @@ define({ "api": [
             "group": "Parameter",
             "type": "Boolean",
             "optional": true,
+            "field": "allowDirectApplication",
+            "defaultValue": "true",
+            "description": "<p>Whether candidates can apply directly (e.g. via widget)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
             "field": "isRemoteAllowed",
             "defaultValue": "false",
             "description": "<p>Opening isRemoteAllowed</p>"
@@ -1921,6 +1929,13 @@ define({ "api": [
             "optional": true,
             "field": "isActive",
             "description": "<p>Opening isActive</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "allowDirectApplication",
+            "description": "<p>Whether candidates can apply directly (e.g. via widget)</p>"
           },
           {
             "group": "Parameter",
@@ -2680,7 +2695,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/widget/openings/:apikey",
-    "title": "1.0 Get all openings for an organization by widget api key",
+    "title": "1.0 Get all openings (for which direct application is allowed) for an organization by widget api key",
     "name": "getOpenings",
     "group": "Widget",
     "permission": [

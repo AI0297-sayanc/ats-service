@@ -23,6 +23,11 @@ const OpeningSchema = new mongoose.Schema({
     default: true
   },
 
+  allowDirectApplication: {
+    type: Boolean,
+    default: true
+  },
+
   isRemoteAllowed: {
     type: Boolean,
     default: false

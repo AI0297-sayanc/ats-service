@@ -37,6 +37,11 @@ const CandidateSchema = new mongoose.Schema({
     index: true
   },
 
+  isDirectApplicant: {
+    type: Boolean,
+    default: false
+  },
+
   cvLink: String,
 
   currentEmployer: String,

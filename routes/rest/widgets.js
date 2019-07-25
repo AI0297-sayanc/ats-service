@@ -8,7 +8,7 @@ const mailer = require("../../lib/mail")
 
 module.exports = {
   /**
-   * @api {GET} /widget/openings/:apikey 1.0 Get all openings for an organization by widget api key
+   * @api {GET} /widget/openings/:apikey 1.0 Get all openings (for which direct application is allowed) for an organization by widget api key
    * @apiName getOpenings
    * @apiGroup Widget
    * @apiPermission Public
@@ -25,7 +25,7 @@ module.exports = {
       if (apiKey === undefined) return res.status(400).json({ error: true, reason: "Missing API Key!" })
       const org = await Org.findOne({ apiKey }).populate("_openings").exec()
       if (org === null) return res.status(400).json({ error: true, reason: "No Organization!" })
-      return res.json({ error: false, openings: org._openings })
+      return res.json({ error: false, openings: org._openings.filter(op => op.allowDirectApplication !== false) })
     } catch (err) {
       return res.json({ error: true, reason: err.message })
     }
@@ -132,10 +132,10 @@ module.exports = {
     if (email === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'email'" })
     if (cvLink === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'cvLink'" })
     try {
-      const opening = await Opening.findOne({ _id: req.params.openingid }).populate("_organization _createdBy").exec()
-      if (opening === null) throw new Error("No such opening!")
+      const opening = await Opening.findOne({ _id: req.params.openingid, allowDirectApplication: { $ne: false } }).populate("_organization _createdBy").exec()
+      if (opening === null) throw new Error("No such opening for direct application!")
       const candidate = await Candidate.create({
-        name, email, phone, cvLink, _opening: opening._id, _organization: opening._organization._id
+        name, email, phone, cvLink, isDirectApplicant: true, _opening: opening._id, _organization: opening._organization._id
       })
       // send emails:
       await Promise.all([
@@ -146,7 +146,7 @@ module.exports = {
         }),
         mailer("application-received-to-company", {
           to: [opening._createdBy.email],
-          subject: "New Candidate Applied",
+          subject: "New candidate applied directly",
           locals: { candidate: name, position: opening.title, company: opening._organization.title }
         })
       ])
