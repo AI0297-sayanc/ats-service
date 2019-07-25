@@ -273,41 +273,6 @@
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "url",
-            "description": "<p>Event url</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": true,
-            "field": "geo",
-            "description": "<p>Event geo</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lat",
-            "description": "<p>Event geo.lat</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "geo.lon",
-            "description": "<p>Event geo.lon</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String[]",
-            "optional": true,
-            "field": "categories",
-            "description": "<p>Event categories</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
             "field": "status",
             "defaultValue": "CONFIRMED",
             "description": "<p>Event status</p>"

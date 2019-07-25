@@ -14,7 +14,7 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // location: String,
+  location: String,
   start: Date,
   end: Date,
   // duration: { hours: 6, minutes: 30 },
@@ -63,9 +63,6 @@ EventSchema.post("save", async function (doc) {
       title: doc.title,
       description: doc.description,
       location: doc.location,
-      url: doc.url,
-      geo: doc.geo,
-      categories: doc.categories,
       status: doc.status || "CONFIRMED",
       organizer: doc.organizer,
       attendees: doc.attendees.map(a => ({ name: a.name, email: a.email }))

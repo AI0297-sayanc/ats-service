@@ -72,11 +72,6 @@ module.exports = {
    * @apiParam  {Date} start Event start
    * @apiParam  {Date} end Event end
    * @apiParam  {String} [location] Event location
-   * @apiParam  {String} [url] Event url
-   * @apiParam  {Object} [geo] Event geo
-   * @apiParam  {Number} [geo.lat] Event geo.lat
-   * @apiParam  {Number} [geo.lon] Event geo.lon
-   * @apiParam  {String[]} [categories] Event categories
    * @apiParam  {String} [status="CONFIRMED"] Event status
    * @apiParam  {Object[]} [extraAttendees[]] Array of Event attendees besides the candidate itself
    * @apiParam  {String} [extraAttendees.name] Name of an extra attendee
@@ -91,7 +86,7 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        candidateId, title, description, location, start, end, url, geo, categories, status, extraAttendees
+        candidateId, title, description, location, start, end, status, extraAttendees
       } = req.body
       if (candidateId === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'candidateId'" })
       const candidate = await Candidate.findOne({ _id: candidateId, _organization: req.user._organization }).exec()
@@ -120,7 +115,7 @@ module.exports = {
 
       const [event, __c] = await Promise.all([
         Event.create({
-          title, description, location, start, end, url, geo, categories, status, organizer, attendees, _candidate: candidateId, _organization: req.user._organization, _createdBy: req.user._user, _workflowStage: candidate._currentWorkflowStage
+          title, description, location, start, end, status, organizer, attendees, _candidate: candidateId, _organization: req.user._organization, _createdBy: req.user._user, _workflowStage: candidate._currentWorkflowStage
         }),
         candidate.save()
       ])
