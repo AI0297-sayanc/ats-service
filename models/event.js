@@ -58,8 +58,8 @@ const EventSchema = new mongoose.Schema({
 EventSchema.post("save", async function (doc) {
   try {
     const event = {
-      start: moment.utc(doc.start).format("YYYY-M-D-H-m").split("-"),
-      duration: { hours: moment.utc(doc.end).diff(moment.utc(doc.start), "hours") },
+      start: moment(doc.start).format("YYYY-M-D-H-m").split("-"),
+      duration: { hours: moment(doc.end).diff(moment(doc.start), "hours") },
       title: doc.title,
       description: doc.description,
       location: doc.location,
@@ -75,7 +75,7 @@ EventSchema.post("save", async function (doc) {
     mailer("interview-schedule", {
       to: [doc.organizer.email, ...doc.attendees.map(a => a.email).filter(a => a !== undefined)],
       subject: event.title,
-      locals: { event, candidate },
+      locals: { event, candidate, when: moment(doc.start).format("llll") },
       attachments: [
         {
           filename: "invite.ics",
