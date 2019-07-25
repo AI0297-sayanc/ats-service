@@ -50,7 +50,7 @@
     "randomstring": "^1.1.5",
     "rmf": "^2.0.0",
     "serve-favicon": "^2.5.0",
-    "tinyurl": "^1.1.2"
+    "tinyurl": "^1.1.4"
   },
   "eslintIgnore": [
     "public/",

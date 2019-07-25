@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const cuid = require("cuid")
+const tinyurl = require("tinyurl")
 
 const OpeningSchema = new mongoose.Schema({
 
@@ -23,9 +24,14 @@ const OpeningSchema = new mongoose.Schema({
     default: true
   },
 
-  allowDirectApplication: {
+  allowDirectApplication: { // basically, whether public job
     type: Boolean,
     default: true
+  },
+
+  shareableText: { // set in hooks below
+    type: String,
+    default: null
   },
 
   isRemoteAllowed: {
@@ -150,7 +156,23 @@ OpeningSchema.virtual("_candidates", {
 
 OpeningSchema.pre("save", function (next) {
   this.lastModifiedAt = Date.now()
+  if ((this.isNew || this.isModified("title")) && this.allowDirectApplication !== false) this.updateShareText = true // for usage in post hooks below
   return next()
+})
+// eslint-disable-next-line prefer-arrow-callback
+OpeningSchema.post("save", async function (doc) {
+  if (doc.updateShareText === true) {
+    try {
+      const [shortUrl, org] = await Promise.all([
+        tinyurl.shorten(`${process.env.WIDGET_SRC_URL}/opening/${doc._id}`),
+        mongoose.model("Organization").findOne({ _id: doc._organization }).select("title").exec()
+      ])
+      const shareableText = `Opening for ${doc.title} at ${org.title}: ${shortUrl}`
+      await mongoose.model("Opening").updateOne({ _id: doc._id }, { shareableText, lastModifiedAt: Date.now() }).exec()
+    } catch (error) {
+      console.log("==> ERR updating shareableText: ", error);
+    }
+  }
 })
 
 OpeningSchema.set("toJSON", { virtuals: true })
