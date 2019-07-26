@@ -1092,6 +1092,41 @@
     "groupTitle": "Candidate"
   },
   {
+    "type": "GET",
+    "url": "/downloadcv/:id/:token",
+    "title": "7.0 Download a candidate's CV file",
+    "name": "downloadCV",
+    "group": "Candidate",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p><code>URL Param</code> The _id of the Candidate whose CV to download</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p><code>URL Param</code> The Auth JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/candidates/index.js",
+    "groupTitle": "Candidate"
+  },
+  {
     "type": "put",
     "url": "/candidate/:id",
     "title": "4.0 Edit a Candidate by _id",

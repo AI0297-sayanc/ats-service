@@ -1,3 +1,6 @@
+const request = require("request")
+const jwt = require("jsonwebtoken")
+
 const Candidate = require("../../../models/candidate")
 const Tag = require("../../../models/tag")
 const Opening = require("../../../models/opening")
@@ -261,6 +264,34 @@ module.exports = {
       return res.json({ error: false })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
+    }
+  },
+
+  /**
+   * Download a candidate's CV file
+   * @api {GET} /downloadcv/:id/:token 7.0 Download a candidate's CV file
+   * @apiName downloadCV
+   * @apiGroup Candidate
+   * @apiPermission User
+   *
+   * @apiParam {String} id `URL Param` The _id of the Candidate whose CV to download
+   * @apiParam {String} token `URL Param` The Auth JWT Token in format "Bearer xxxx.yyyy.zzzz"
+   */
+  async downloadCV(req, res) {
+    const { token, id } = req.params
+    try {
+      const user = jwt.verify(token, process.env.SECRET)
+      const candidate = await Candidate.findOne({ _id: id, _organization: user._organization }).exec()
+      if (candidate === null || candidate.cvLink === undefined) return res.status(404).send("NOT FOUND!!!")
+      const ffullname = candidate.cvLink.replace(/\/$/, "").split("/").pop()
+      const fext = ffullname.split(".").pop()
+      const fname = candidate.name.full.replace(" ", "_")
+      res.set(`Content-Disposition", "attachment;filename=${fname}.${fext}`)
+      request(candidate.cvLink).pipe(res)
+      return "OK" // redundant; just to appease the linter!!
+    } catch (err) {
+      console.log("==> Download CV ERR: ", err);
+      return res.status(500).send("NOT OK!!!")
     }
   }
 

@@ -205,12 +205,12 @@ CandidateSchema.post("find", async (docs) => {
 })
 /* always populate message & note counts and activities: */
 CandidateSchema.post("findOne", async (doc) => {
-  await doc.populate("messageCount noteCount").execPopulate()
+  if (doc !== null) await doc.populate("messageCount noteCount").execPopulate()
 })
 CandidateSchema.post("save", async (doc) => {
   try {
     /* always populate message & note counts and activities: */
-    await doc.populate("messageCount noteCount").execPopulate()
+    if (doc !== null) await doc.populate("messageCount noteCount").execPopulate()
     // eslint-disable-next-line newline-per-chained-call
     const [user, opening] = await Promise.all([
       mongoose.model("User").findOne({ _id: doc._user }).populate("_organization").exec(),

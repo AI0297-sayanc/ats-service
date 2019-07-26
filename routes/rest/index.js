@@ -36,6 +36,8 @@ router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
 router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Webhook Handler
 router.post("/webhook/message/opened", messages.opened) // UNAUTHENTICATED; Mailgun Webhook Handler
 
+router.get("/downloadcv/:id/:token", candidates.downloadCV) // UNAUTHENTICATED, but verify auth inside route def using jwt given as param
+
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 
 router.get("/users", users.find)

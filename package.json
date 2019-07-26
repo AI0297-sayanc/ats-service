@@ -48,6 +48,7 @@
     "node-mocks-http": "^1.7.3",
     "pusher": "^2.2.1",
     "randomstring": "^1.1.5",
+    "request": "^2.88.0",
     "rmf": "^2.0.0",
     "serve-favicon": "^2.5.0",
     "tinyurl": "^1.1.4"
