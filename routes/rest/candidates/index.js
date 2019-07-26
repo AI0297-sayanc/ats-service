@@ -286,7 +286,7 @@ module.exports = {
       const ffullname = candidate.cvLink.replace(/\/$/, "").split("/").pop()
       const fext = ffullname.split(".").pop()
       const fname = candidate.name.full.replace(" ", "_")
-      res.set(`Content-Disposition", "attachment;filename=${fname}.${fext}`)
+      res.set("Content-Disposition", `attachment;filename=${fname}.${fext}`)
       request(candidate.cvLink).pipe(res)
       return "OK" // redundant; just to appease the linter!!
     } catch (err) {
