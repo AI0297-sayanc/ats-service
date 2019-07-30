@@ -33,7 +33,8 @@ router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; 
 router.get("/tags/:type", tags.find) // UNAUTHENTICATED
 router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
 // router.post("/widget/apply", widgets.post) // UNAUTHENTICATED
-router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Webhook Handler
+router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Routes Handler
+router.post("/webhook/message/delivered", messages.delivered) // UNAUTHENTICATED; Mailgun Webhook Handler
 router.post("/webhook/message/opened", messages.opened) // UNAUTHENTICATED; Mailgun Webhook Handler
 
 router.get("/downloadcv/:id/:token", candidates.downloadCV) // UNAUTHENTICATED, but verify auth inside route def using jwt given as param
