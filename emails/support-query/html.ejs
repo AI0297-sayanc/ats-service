@@ -1,0 +1,7 @@
+<p>
+<b>TOPIC: </b> <%= topic %><br/>
+<b>FROM: </b> <%= user.fullName %> (<a href="mailto:<%= user.email %>"><%= user.email %>)</a><br/>
+<b>ORGANIZATION: </b> <%= org.title %><br/>
+<b>MESSAGE: </b><br/>
+<%- message %>
+</p>

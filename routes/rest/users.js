@@ -162,7 +162,7 @@ module.exports = {
 
   /**
    * Delete a User by _id
-   * @api {delete} /user/:id 4.0 Delete a User by _id
+   * @api {delete} /user/:id 5.0 Delete a User by _id
    * @apiName deleteUser
    * @apiGroup User
    * @apiPermission Public

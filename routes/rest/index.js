@@ -41,6 +41,8 @@ router.get("/downloadcv/:id/:token", candidates.downloadCV) // UNAUTHENTICATED, 
 
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 
+router.post("/support", require("./support").supportQuery)
+
 router.get("/users", users.find)
 router.get("/user/:id", users.get)
 router.post("/user", users.post)
