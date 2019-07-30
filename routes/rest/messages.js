@@ -68,18 +68,18 @@ module.exports = {
   async replyReceived(req, res) {
     const { headers, body } = req
     // console.log("***********", headers, body);
-    if (!mailgun.validateWebhook(body.timestamp, body.token, body.signature)) {
-      console.error("ERR: Request came, but not from Mailgun")
-      return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
-    }
-    const data = {}
-    data.replyToMsgId = body["In-Reply-To"]
-    if (data.replyToMsgId === undefined) return res.status(406).send({ error: { message: "Not a Reply!" } })
-    data.mgMsgId = body["Message-Id"]
-    data.from = body.from
-    data.subject = body.subject
-    data.html = body["body-html"]
     try {
+      if (!mailgun.validateWebhook(body.timestamp, body.token, body.signature)) {
+        console.error("ERR: Request came, but not from Mailgun")
+        return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
+      }
+      const data = {}
+      data.replyToMsgId = body["In-Reply-To"]
+      if (data.replyToMsgId === undefined) return res.status(406).send({ error: { message: "Not a Reply!" } })
+      data.mgMsgId = body["Message-Id"]
+      data.from = body.from
+      data.subject = body.subject
+      data.html = body["body-html"]
       // eslint-disable-next-line newline-per-chained-call
       const {
         threadId, from, _organization, _candidate, _user
@@ -108,11 +108,11 @@ module.exports = {
   async delivered(req, res) {
     const { body } = req
     // console.log("***********", headers, body);
-    if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
-      console.error("ERR: Request came, but not from Mailgun")
-      return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
-    }
     try {
+      if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
+        console.error("ERR: Request came, but not from Mailgun")
+        return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
+      }
       const data = body["event-data"]
       if (data.event !== "delivered") return res.status(200).send("WRONG EVENT") // fail gracefully!
       const mgMsgId = `<${data.message.headers["message-id"]}>`
@@ -135,11 +135,11 @@ module.exports = {
   async opened(req, res) {
     const { body } = req
     // console.log("***********", headers, body);
-    if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
-      console.error("ERR: Request came, but not from Mailgun")
-      return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
-    }
     try {
+      if (!mailgun.validateWebhook(body.signature.timestamp, body.signature.token, body.signature.signature)) {
+        console.error("ERR: Request came, but not from Mailgun")
+        return res.status(406).send({ error: { message: "Invalid signature. Are you even Mailgun?" } })
+      }
       const data = body["event-data"]
       if (data.event !== "opened") return res.status(200).send("WRONG EVENT") // fail gracefully!
       const mgMsgId = `<${data.message.headers["message-id"]}>`
