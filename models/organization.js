@@ -5,6 +5,8 @@ const OrganizationSchema = new mongoose.Schema({
 
   title: String,
 
+  logoUrl: String,
+
   address: String,
 
   widgetApiKey: {

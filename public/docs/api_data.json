@@ -102,10 +102,31 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "organization",
-            "description": "<p>Organization Name</p>"
+            "description": "<p>Organization Details</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "organization.title",
+            "description": "<p>Organization Title</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organization.logoUrl",
+            "description": "<p>Organization Logo URL</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organization.address",
+            "description": "<p>Organization Address</p>"
           },
           {
             "group": "Parameter",

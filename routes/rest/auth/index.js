@@ -29,9 +29,12 @@ module.exports = {
       if (handle === undefined || password === undefined) {
         return res.status(400).json({ error: true, reason: "Fields `handle` and `password` are mandatory" })
       }
-      const user = await User.findOne({
-        $or: [{ email: handle.toLowerCase() }, { phone: handle }]
-      }).exec()
+      const user = await User
+        .findOne({
+          $or: [{ email: handle.toLowerCase() }, { phone: handle }]
+        })
+        .populate("_organization")
+        .exec()
       if (user === null) throw new Error("User Not Found")
       if (user.isActive === false) throw new Error("User Inactive")
       // check pass
@@ -43,8 +46,11 @@ module.exports = {
         fullName: user.name.full,
         email: user.email,
         phone: user.phone,
-        _organization: user._organization,
-        organization: user._organization,
+        _organization: user._organization._id,
+        organization: user._organization._id,
+        organizationName: user._organization.title,
+        organizationLogoUrl: user._organization.logoUrl,
+        organizationAddress: user._organization.address
       }
       const expiresInHours = (expiry === undefined || expiry === null || Number(expiry) === 0)
         ? 24 * 30 // 1 month (default)

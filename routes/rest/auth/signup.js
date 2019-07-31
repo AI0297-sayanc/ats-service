@@ -13,7 +13,10 @@ module.exports = {
   * @apiPermission Public
   *
   * @apiParam {String} email User email
-  * @apiParam {String} organization Organization Name
+  * @apiParam {Object} organization Organization Details
+  * @apiParam {String} organization.title Organization Title
+  * @apiParam {String} [organization.logoUrl] Organization Logo URL
+  * @apiParam {String} [organization.address] Organization Address
   * @apiParam {Object} name User name
   * @apiParam {String} name.first User first name
   * @apiParam {String} [name.last] User last name
@@ -45,12 +48,12 @@ module.exports = {
         organization
       } = req.body
       if (email === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field `email`" })
-      if (organization === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field `organization`" })
       if (name === undefined || name.first === undefined) return res.status(400).json({ error: true, reason: "Please specify First Name!" })
+      if (organization === undefined || organization.title === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field `organization.title`" })
       const password = (req.body.password !== undefined)
         ? req.body.password
         : randomstring.generate(8) // auto-generated plaintext pass
-      const org = await Org.create({ name: organization })
+      const org = await Org.create(organization)
       let user = await User.create({
         email,
         phone,
