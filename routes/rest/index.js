@@ -33,7 +33,7 @@ router.post("/forgotpassword", forgotpassword.startWorkflow) // UNAUTHENTICATED;
 router.post("/resetpassword", forgotpassword.resetPassword) // UNAUTHENTICATED; AJAX
 router.get("/tags/:type", tags.find) // UNAUTHENTICATED
 router.get("/widget/openings/:apikey", widgets.get) // UNAUTHENTICATED
-// router.post("/widget/apply", widgets.post) // UNAUTHENTICATED
+router.post("/applyforjob/:openingid", widgets.applyForJob) // UNAUTHENTICATED
 router.post("/webhook/message/replyreceived", messages.replyReceived) // UNAUTHENTICATED; Mailgun Routes Handler
 router.post("/webhook/message/delivered", messages.delivered) // UNAUTHENTICATED; Mailgun Webhook Handler
 router.post("/webhook/message/opened", messages.opened) // UNAUTHENTICATED; Mailgun Webhook Handler
