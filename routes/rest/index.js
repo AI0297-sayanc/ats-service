@@ -24,6 +24,7 @@ const candidates = require("./candidates")
 const events = require("./candidates/events")
 const notes = require("./candidates/notes")
 const stages = require("./candidates/stages")
+const profile = require("./profile")
 
 
 router.post("/login", login.post) // UNAUTHENTICATED
@@ -93,5 +94,8 @@ router.post("/event", events.post)
 router.put("/candidate/nextstage/:id", stages.nextStage)
 router.put("/candidate/movetostage/:id", stages.moveToStage)
 router.put("/candidate/decision/:id", stages.changeDecisionStatus)
+
+router.get("/me", profile.get)
+router.put("/me", profile.put)
 
 module.exports = router

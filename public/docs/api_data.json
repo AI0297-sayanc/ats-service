@@ -1679,6 +1679,174 @@
     "groupTitle": "ExportImport"
   },
   {
+    "type": "get",
+    "url": "/me",
+    "title": "1.0 Fetch my profile",
+    "name": "getMyProfile",
+    "group": "MyProfile",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/profile.js",
+    "groupTitle": "MyProfile"
+  },
+  {
+    "type": "put",
+    "url": "/me",
+    "title": "2.0 Edit my profile details",
+    "name": "profileEdit",
+    "group": "MyProfile",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>My phone</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "isActive",
+            "defaultValue": "true",
+            "description": "<p>My isActive status</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "name",
+            "description": "<p>My name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name.first",
+            "description": "<p>My name.first</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name.last",
+            "description": "<p>My name.last</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "purpose",
+            "description": "<p>My purpose</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "role",
+            "description": "<p>My role</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "website",
+            "description": "<p>My website</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "location",
+            "description": "<p>My location</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.city",
+            "description": "<p>My location.city</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location.country",
+            "description": "<p>My location.country</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "organization",
+            "description": "<p>My organization details</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organization.name",
+            "description": "<p>My organization name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organization.address",
+            "description": "<p>My organization address</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "organization.logoUrl",
+            "description": "<p>My organization logoUrl</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/rest/profile.js",
+    "groupTitle": "MyProfile"
+  },
+  {
     "type": "post",
     "url": "/opening",
     "title": "3.0 Create a new Opening",
