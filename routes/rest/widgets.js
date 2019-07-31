@@ -21,9 +21,9 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const apiKey = req.params.apikey
-      if (apiKey === undefined) return res.status(400).json({ error: true, reason: "Missing API Key!" })
-      const org = await Org.findOne({ apiKey }).populate("_openings").exec()
+      const widgetApiKey = req.params.apikey
+      if (widgetApiKey === undefined) return res.status(400).json({ error: true, reason: "Missing API Key!" })
+      const org = await Org.findOne({ widgetApiKey }).populate("_openings").exec()
       if (org === null) return res.status(400).json({ error: true, reason: "No Organization!" })
       return res.json({ error: false, openings: org._openings.filter(op => op.allowDirectApplication !== false) })
     } catch (err) {
@@ -73,7 +73,7 @@ module.exports = {
   */
   async put(req, res) {
     try {
-      const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()
+      const org = await Org.findOne({ _id: req.user._organization }).select("widgetApiKey").exec()
       if (org === null) return res.status(400).json({ error: true, reason: "No Organization!" })
       org.widgetApiKey = cuid()
       org.lastModifiedAt = Date.now()
@@ -98,7 +98,7 @@ module.exports = {
   */
   async getWidgetCode(req, res) {
     try {
-      const org = await Org.findOne({ _id: req.user._organization }).select("apiKey").exec()
+      const org = await Org.findOne({ _id: req.user._organization }).select("widgetApiKey").exec()
       if (org === null) return res.status(400).json({ error: true, reason: "No Organization!" })
       const script = `<script type="text/javascript">(function(){var s=document,t=s.getElementsByTagName("head")[0],e=s.createElement("script");l=s.createElement("link");w=s.createElement("${process.env.WIDGET_CUSTOM_ELEMENT || "vue-widget"}");cs=s.currentScript;e.type="text/javascript";e.async=true;e.src="${process.env.WIDGET_SRC_URL}/js/app.js";l.rel="stylesheet";l.href="${process.env.WIDGET_SRC_URL}/css/app.css";w.setAttribute("api-key", "${org.widgetApiKey}");t.appendChild(l);t.appendChild(e);cs.parentNode.insertBefore(w,cs)})();</script>`
       return res.json({ error: false, apiKey: org.widgetApiKey, script })
