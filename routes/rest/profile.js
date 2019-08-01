@@ -60,8 +60,10 @@ module.exports = {
       const {
         phone, password, isActive, name, purpose, role, website, location, organization
       } = req.body
-      const user = await User.findOne({ _id: req.params.id }).exec()
-      const org = await Org.findOne({ _id: user._organization }).exec()
+      const [user, org] = await Promise.all([
+        User.findOne({ _id: req.user.id }).exec(),
+        Org.findOne({ _id: req.user._organization }).exec()
+      ])
 
       const promises = []
 
