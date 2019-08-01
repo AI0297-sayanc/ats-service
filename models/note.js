@@ -22,6 +22,11 @@ const NoteSchema = new mongoose.Schema({
     ref: "Organization"
   },
 
+  _workflowStage: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WorkflowStage"
+  },
+
   createdAt: {
     type: Date,
     default: Date.now

@@ -34,7 +34,13 @@ const MessageSchema = new mongoose.Schema({
     ref: "User"
   },
   toName: { type: String, default: null }, // redundancy; set in hooks below
-  toEmail: { type: String, default: null }, // redundancy; set in hooks below
+  toEmail: { type: String, default: null }, // redundancy; set in hooks below,
+
+  _workflowStage: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "WorkflowStage",
+    default: null
+  },
 
 })
 

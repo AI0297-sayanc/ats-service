@@ -89,7 +89,7 @@ module.exports = {
 
       const [note, __c] = await Promise.all([
         Note.create({
-          text, _createdBy: req.user._id, _organization: req.user._organization, _candidate: candidateId
+          text, _createdBy: req.user._id, _organization: req.user._organization, _candidate: candidateId, _workflowStage: candidate._currentWorkflowStage
         }),
         candidate.save()
       ])
