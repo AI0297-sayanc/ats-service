@@ -1,5 +1,7 @@
 const csv = require("csvtojson")
 const rmf = require("rmf")
+const moment = require("moment")
+
 
 const Opening = require("../../models/opening")
 const Candidate = require("../../models/candidate")
@@ -77,7 +79,10 @@ module.exports = {
 
       const data = await csv({
         colParser: {
-          skills(item) { return item.split("|").map(c => c.trim()) }
+          skills(item) { return item.split("|").map(c => c.trim()) },
+          availableFrom(item) { return moment(item, "llll").isValid() ? moment(item, "llll").toDate() : undefined },
+          rejectedAt(item) { return moment(item, "llll").isValid() ? moment(item, "llll").toDate() : undefined },
+          acceptedAt(item) { return moment(item, "llll").isValid() ? moment(item, "llll").toDate() : undefined },
         }
       }).fromFile(path)
 

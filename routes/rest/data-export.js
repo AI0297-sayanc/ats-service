@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const moment = require("moment")
 const jsonexport = require("jsonexport")
 const { promisify } = require("util")
 
@@ -78,7 +79,7 @@ module.exports = {
         currentSalary: candidate.currentSalary,
         currentLocation: candidate.currentLocation,
         noticePeriod: candidate.noticePeriod,
-        availableFrom: candidate.availableFrom,
+        availableFrom: moment(candidate.availableFrom).format("llll"),
         yearsOfExperience: candidate.yearsOfExperience,
         highestEducationalQualification: candidate.highestEducationalQualification,
         experienceSummary: candidate.experienceSummary,
@@ -86,9 +87,9 @@ module.exports = {
         source: candidate.source,
         expectedSalary: candidate.expectedSalary,
         decisionStatus: candidate.decisionStatus,
-        rejectedAt: candidate.rejectedAt || "N.A.",
+        rejectedAt: candidate.rejectedAt ? moment(candidate.rejectedAt).format("llll") : "N.A.",
         rejectionReason: candidate.rejectionReason || "N.A.",
-        acceptedAt: candidate.acceptedAt || "N.A.",
+        acceptedAt: candidate.acceptedAt ? moment(candidate.acceptedAt).format("llll") : "N.A.",
         skills: candidate._skills.map(s => s.text),
         createdBy: (candidate._createdBy) ? candidate._createdBy.name.full : "N.A"
       })), { arrayPathString: "|" })
