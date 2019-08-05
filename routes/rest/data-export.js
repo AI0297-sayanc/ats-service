@@ -41,7 +41,7 @@ module.exports = {
         jobCode: opening.jobCode,
         skills: opening._skillsRequired.map(s => s.text),
         tags: opening._tags.map(t => t.text),
-        createdBy: (opening._createdBy) ? opening._createdBy.name.full : "N.A"
+        createdBy: (opening._createdBy) ? opening._createdBy.name.full : "N/A"
       })), { arrayPathString: "|" })
 
       res.set("Content-Disposition", "attachment;filename=openings.csv")
@@ -67,7 +67,7 @@ module.exports = {
     // if (req.body.openingId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'openingId'" })
     try {
       const user = jwt.verify(token, process.env.SECRET)
-      const candidates = await Candidate.find({ _opening: openingid, _organization: user._organization }).populate("_createdBy _skills").exec()
+      const candidates = await Candidate.find({ _opening: openingid, _organization: user._organization }).populate("_createdBy _skills _tags").exec()
       const csvString = await jsonExport(candidates.map(candidate => ({
         name: candidate.name,
         email: candidate.email,
@@ -87,14 +87,14 @@ module.exports = {
         source: candidate.source,
         expectedSalary: candidate.expectedSalary,
         decisionStatus: candidate.decisionStatus,
-        rejectedAt: candidate.rejectedAt ? moment(candidate.rejectedAt).format("llll") : "N.A.",
-        rejectionReason: candidate.rejectionReason || "N.A.",
-        acceptedAt: candidate.acceptedAt ? moment(candidate.acceptedAt).format("llll") : "N.A.",
+        rejectedAt: candidate.rejectedAt ? moment(candidate.rejectedAt).format("llll") : "N/A",
+        rejectionReason: candidate.rejectionReason || "N/A",
+        acceptedAt: candidate.acceptedAt ? moment(candidate.acceptedAt).format("llll") : "N/A",
         skills: candidate._skills.map(s => s.text),
-        createdBy: (candidate._createdBy) ? candidate._createdBy.name.full : "N.A"
+        createdBy: (candidate._createdBy) ? candidate._createdBy.name.full : "N/A"
       })), { arrayPathString: "|" })
 
-      res.set("Content-Disposition", `attachment;filename=candidates-${req.body.openingId}.csv`)
+      res.set("Content-Disposition", `attachment;filename=candidates-${openingid}.csv`)
       res.set("Content-Type", "text/csv")
       return res.send(csvString)
     } catch (err) {

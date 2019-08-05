@@ -51,7 +51,8 @@ const OpeningSchema = new mongoose.Schema({
 
   jobFunction: {
     type: String,
-    enum: ["HR", "Marketing", "IT", "Finance"]
+    enum: ["HR", "Marketing", "IT", "Finance", "N/A"],
+    default: "N/A"
   },
 
   minExpRequired: {
@@ -95,7 +96,8 @@ const OpeningSchema = new mongoose.Schema({
 
   jobLevel: {
     type: String,
-    enum: ["Entry", "Associate", "Middle", "Senior", "Director & Above"]
+    enum: ["Entry", "Associate", "Middle", "Senior", "Director & Above", "N/A"],
+    default: "N/A"
   },
 
   jobCode: {

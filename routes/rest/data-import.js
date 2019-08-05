@@ -37,15 +37,18 @@ module.exports = {
         }
       }).fromFile(path)
 
-      const openings = await Promise.all([
-        Opening.create(data.map(async el => ({
-          ...el,
-          _skillsRequired: await Tag.batchUpsert("skill", el.skillsRequired),
-          _tags: await Tag.batchUpsert("opening", el.tags),
-          _organization: req.user._organization,
-          _createdBy: req.user._id,
-          _workflowStages: []
-        }))),
+      const mapper = async el => ({
+        ...el,
+        jobFunction: (el.jobFunction === undefined || el.jobFunction.trim() === "") ? "N/A" : el.jobFunction,
+        jobLevel: (el.jobLevel === undefined || el.jobLevel.trim() === "") ? "N/A" : el.jobLevel,
+        _skillsRequired: await Tag.batchUpsert("skill", el.skillsRequired),
+        _tags: await Tag.batchUpsert("opening", el.tags),
+        _organization: req.user._organization,
+        _createdBy: req.user._id,
+        _workflowStages: []
+      })
+      const [openings, __rm] = await Promise.all([
+        Opening.create(await Promise.all(data.map(mapper))),
         rmf(path) // Del the uploaded file to save some server space
       ])
 
