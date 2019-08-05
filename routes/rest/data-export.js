@@ -91,6 +91,7 @@ module.exports = {
         rejectionReason: candidate.rejectionReason || "N/A",
         acceptedAt: candidate.acceptedAt ? moment(candidate.acceptedAt).format("llll") : "N/A",
         skills: candidate._skills.map(s => s.text),
+        tags: candidate._tags.map(s => s.text),
         createdBy: (candidate._createdBy) ? candidate._createdBy.name.full : "N/A"
       })), { arrayPathString: "|" })
 
