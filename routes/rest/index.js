@@ -40,6 +40,9 @@ router.post("/webhook/message/opened", messages.opened) // UNAUTHENTICATED; Mail
 
 router.get("/downloadcv/:id/:token", candidates.downloadCV) // UNAUTHENTICATED, but verify auth inside route def using jwt given as param
 
+router.get("/export/openings/:token", dataExports.openings) // UNAUTHENTICATED, but verify auth inside route def using jwt given as param
+router.get("/export/candiates/:openingid/:token", dataExports.candidates) // UNAUTHENTICATED, but verify auth inside route def using jwt given as param
+
 router.all("*", checkJwt) // use this auth middleware for ALL subsequent routes
 
 router.post("/support", require("./support").supportQuery)
@@ -71,9 +74,6 @@ router.post("/messages", messages.get)
 
 router.post("/import/openings", upload.single("csv-file"), dataImports.openings)
 router.post("/import/candidates", upload.single("csv-file"), dataImports.candidates)
-
-router.get("/export/openings", dataExports.openings)
-router.get("/export/candiates", dataExports.candidates)
 
 router.post("/candidates", candidates.find)
 router.get("/candidate/:id", candidates.get)

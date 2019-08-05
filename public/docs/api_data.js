@@ -1531,19 +1531,6 @@ define({ "api": [
         "name": "User"
       }
     ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
-          }
-        ]
-      }
-    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1551,8 +1538,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "openingId",
-            "description": "<p>_id of the opening to export candidates from</p>"
+            "field": "token",
+            "description": "<p><code>URL Param</code> The Auth JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "openingid",
+            "description": "<p><code>URL Param</code> _id of the opening to export candidates from</p>"
           }
         ]
       }
@@ -1563,7 +1557,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/export/openings",
+    "url": "/export/openings/",
     "title": "2.0. Bulk export openings as CSV file",
     "name": "exportOpenings",
     "group": "ExportImport",
@@ -1572,15 +1566,15 @@ define({ "api": [
         "name": "User"
       }
     ],
-    "header": {
+    "parameter": {
       "fields": {
-        "Header": [
+        "Parameter": [
           {
-            "group": "Header",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Authorization",
-            "description": "<p>The JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
+            "field": "token",
+            "description": "<p><code>URL Param</code> The Auth JWT Token in format &quot;Bearer xxxx.yyyy.zzzz&quot;</p>"
           }
         ]
       }

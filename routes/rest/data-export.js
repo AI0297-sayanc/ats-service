@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken")
 const jsonexport = require("jsonexport")
 const { promisify } = require("util")
 
@@ -9,16 +10,17 @@ const Candidate = require("../../models/candidate")
 module.exports = {
   /**
   * Bulk export a list of openings as CSV file
-  * @api {get} /export/openings 2.0. Bulk export openings as CSV file
+  * @api {get} /export/openings/ 2.0. Bulk export openings as CSV file
   * @apiName exportOpenings
   * @apiGroup ExportImport
   * @apiPermission User
   *
-  * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
+  * @apiParam  {String} token `URL Param` The Auth JWT Token in format "Bearer xxxx.yyyy.zzzz"
   * */
   async openings(req, res) {
     try {
-      const openings = await Opening.find({ _organization: req.user._organization }).populate("_createdBy _skillsRequired").exec()
+      const user = jwt.verify(req.params.token, process.env.SECRET)
+      const openings = await Opening.find({ _organization: user._organization }).populate("_createdBy _skillsRequired").exec()
       const csvString = await jsonExport(openings.map(opening => ({
         title: opening.title,
         description: opening.description,
@@ -56,14 +58,15 @@ module.exports = {
   * @apiGroup ExportImport
   * @apiPermission User
   *
-  * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
-  *
-  * @apiParam  {String} openingId _id of the opening to export candidates from
+  * @apiParam  {String} token `URL Param` The Auth JWT Token in format "Bearer xxxx.yyyy.zzzz"
+  * @apiParam  {String} openingid `URL Param` _id of the opening to export candidates from
   * */
   async candidates(req, res) {
-    if (req.body.openingId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'openingId'" })
+    const { token, openingid } = req.params
+    // if (req.body.openingId === undefined) return res.status(400).json({ error: true, reason: "Missing mandatory field 'openingId'" })
     try {
-      const candidates = await Candidate.find({ _opening: req.body.openingId, _organization: req.user._organization }).populate("_createdBy _skills").exec()
+      const user = jwt.verify(token, process.env.SECRET)
+      const candidates = await Candidate.find({ _opening: openingid, _organization: user._organization }).populate("_createdBy _skills").exec()
       const csvString = await jsonExport(candidates.map(candidate => ({
         name: candidate.name,
         email: candidate.email,
