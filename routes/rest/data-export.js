@@ -21,7 +21,7 @@ module.exports = {
   async openings(req, res) {
     try {
       const user = jwt.verify(req.params.token, process.env.SECRET)
-      const openings = await Opening.find({ _organization: user._organization }).populate("_createdBy _skillsRequired").exec()
+      const openings = await Opening.find({ _organization: user._organization }).populate("_createdBy _skillsRequired _tags").exec()
       const csvString = await jsonExport(openings.map(opening => ({
         title: opening.title,
         description: opening.description,
