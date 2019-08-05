@@ -33,6 +33,7 @@ module.exports = {
         colParser: {
           skillsRequired(item) { return item.split("|").map(c => c.trim()) },
           tags(item) { return item.split("|").map(c => c.trim()) },
+          locations(item) { return item.split("|").map(c => c.trim()) },
         }
       }).fromFile(path)
 
