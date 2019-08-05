@@ -81,14 +81,18 @@ module.exports = {
         }
       }).fromFile(path)
 
-      const candidates = await Promise.all([
-        Candidate.create(data.map(async el => ({
+      const mapper = async (el) => {
+        const _skills = await Tag.batchUpsert("skill", el.skills)
+        return {
           ...el,
-          _skills: await Tag.batchUpsert("skill", el.skills),
+          _skills,
           _opening: req.body.openingId,
           _organization: req.user._organization,
           _createdBy: req.user._id
-        }))),
+        }
+      }
+      const [candidates, __rm] = await Promise.all([
+        Candidate.create(await Promise.all(data.map(mapper))),
         rmf(path) // Del the uploaded file to save some server space
       ])
 
