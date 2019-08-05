@@ -1,3 +1,5 @@
+const randomstring = require("randomstring")
+const mailer = require("../../lib/mail")
 
 const User = require("../../models/user.js")
 
@@ -63,9 +65,9 @@ module.exports = {
    * @apiHeader {String} Authorization The JWT Token in format "Bearer xxxx.yyyy.zzzz"
    *
    * @apiParam  {String} email User email
-   * @apiParam  {String} password User password
    * @apiParam  {Object} name User name
    * @apiParam  {String} name.first User name.first
+   * @apiParam  {String} [password] User password (plaintext). If not specified, one will be randomly generated & emailed
    * @apiParam  {String} [phone] User phone
    * @apiParam  {Boolean} [isActive=true] User isActive
    * @apiParam  {String} [name.last] User name.last
@@ -85,18 +87,29 @@ module.exports = {
   async post(req, res) {
     try {
       const {
-        email, phone, password, isActive, name, purpose, role, website, location
+        email, phone, isActive, name, purpose, role, website, location
       } = req.body
       if (email === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'email'" })
-      if (password === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'password'" })
+      // if (password === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'password'" })
       if (name === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name'" })
       if (name.first === undefined) return res.status(400).json({ error: true, reason: "Missing manadatory field 'name.first'" })
+
+      const password = (req.body.password !== undefined)
+        ? req.body.password
+        : randomstring.generate(8) // auto-generated plaintext pass
+
       let user = await User.create({
         email, phone, password, isActive, name, purpose, role, website, location, _createdBy: req.user._id, _organization: req.user._organization
       })
       user = user.toObject()
       delete user.password
       delete user.forgotpassword
+      // Send welcome email, but NO WAITING!
+      mailer("welcome", {
+        to: email,
+        subject: "Welcome!!!",
+        locals: { email, password, name }
+      })
       return res.json({ error: false, user })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })

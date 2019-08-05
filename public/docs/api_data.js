@@ -2441,13 +2441,6 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "password",
-            "description": "<p>User password</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Object",
             "optional": false,
             "field": "name",
@@ -2459,6 +2452,13 @@ define({ "api": [
             "optional": false,
             "field": "name.first",
             "description": "<p>User name.first</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>User password (plaintext). If not specified, one will be randomly generated &amp; emailed</p>"
           },
           {
             "group": "Parameter",
