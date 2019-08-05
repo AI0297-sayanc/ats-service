@@ -33,6 +33,10 @@ const OpeningSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  shareableUrl: { // set in hooks below
+    type: String,
+    default: null
+  },
 
   isRemoteAllowed: {
     type: Boolean,
@@ -156,19 +160,20 @@ OpeningSchema.virtual("_candidates", {
 
 OpeningSchema.pre("save", function (next) {
   this.lastModifiedAt = Date.now()
-  if ((this.isNew || this.isModified("title")) && this.allowDirectApplication !== false) this.updateShareText = true // for usage in post hooks below
+  if ((this.isNew || this.isModified("title")) && this.allowDirectApplication !== false) this.updateShareables = true // for usage in post hooks below
   return next()
 })
 // eslint-disable-next-line prefer-arrow-callback
 OpeningSchema.post("save", async function (doc) {
-  if (doc.updateShareText === true) {
+  if (doc.updateShareables === true) {
     try {
+      const shareableUrl = `${process.env.SHARE_OPENING_BASE_URL}/opening/${doc._id}`
       const [shortUrl, org] = await Promise.all([
-        tinyurl.shorten(`${process.env.WIDGET_SRC_URL}/opening/${doc._id}`),
+        tinyurl.shorten(shareableUrl),
         mongoose.model("Organization").findOne({ _id: doc._organization }).select("title").exec()
       ])
       const shareableText = `Opening for ${doc.title} at ${org.title}: ${shortUrl}`
-      await mongoose.model("Opening").updateOne({ _id: doc._id }, { shareableText, lastModifiedAt: Date.now() }).exec()
+      await mongoose.model("Opening").updateOne({ _id: doc._id }, { shareableText, shareableUrl, lastModifiedAt: Date.now() }).exec()
     } catch (error) {
       console.log("==> ERR updating shareableText: ", error);
     }
