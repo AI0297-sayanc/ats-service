@@ -1816,7 +1816,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "organization.name",
+            "field": "organization.title",
             "description": "<p>My organization name</p>"
           },
           {

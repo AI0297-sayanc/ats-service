@@ -51,7 +51,7 @@ module.exports = {
    * @apiParam  {String} [location.city] My location.city
    * @apiParam  {String} [location.country] My location.country
    * @apiParam  {Object} [organization] My organization details
-   * @apiParam  {String} [organization.name] My organization name
+   * @apiParam  {String} [organization.title] My organization name
    * @apiParam  {String} [organization.address] My organization address
    * @apiParam  {String} [organization.logoUrl] My organization logoUrl
    */
@@ -81,7 +81,7 @@ module.exports = {
       promises.push(user.save())
 
       if (organization !== undefined) {
-        if (organization.name !== undefined) org.name = organization.name
+        if (organization.title !== undefined) org.title = organization.title
         if (organization.logoUrl !== undefined) org.logoUrl = organization.logoUrl
         if (organization.address !== undefined) org.address = organization.address
         organization.lastModifiedAt = user.lastModifiedAt
