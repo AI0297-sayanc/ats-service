@@ -17,10 +17,10 @@
     <noscript>
       <strong>We're sorry but recruitech-widget doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <h1>
-    <img src="<%= opening._organization.logoUrl %> " style="max-width: 48px; max-height: 48px;" />&nbsp;&nbsp;
-      <%= opening._organization.title %>
+    <h1 style="padding: 0.5em;">
+      <img src="<%= opening._organization.logoUrl %> " style="max-width: 48px; max-height: 48px;" />&nbsp;&nbsp;<%= opening._organization.title %>
     </h1>
+    <span style="margin: 0 1em; font-style: italic;"><%= opening._organization.address %></span>
     <hr/>
     <!-- <div id="app"></div> -->
     <recruitech-widget api-key="<%= opening._organization.widgetApiKey %>" opening-id="<%= opening._id %>"></recruitech-widget>
