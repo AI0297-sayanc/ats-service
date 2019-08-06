@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta property="og:title" content="<%= opening.shareableText %>">
-    <meta property="og:description" content="<%= opening.description || opening.title || 'Recruitech' %>">
+    <meta property="og:title" content="<%= opening.title %>">
+    <meta property="og:description" content="<%= opening.shareableText || 'Recruitech' %>">
     <meta property="og:image" content="<%= opening._organization.logoUrl %>">
-    <meta property="og:url" content="<%= opening.shareableUrl %>">
+    <meta property="og:url" content="<%= `${process.env.SHARE_OPENING_BASE_URL}/opening/${opening._id}`  %>">
     <script src="<%= `${process.env.WIDGET_SRC_URL}/js/app.js` %>"></script>
     <link rel="stylesheet" href="<%= `${process.env.WIDGET_SRC_URL}/css/app.css` %>" />
     <title>recruitech-widget</title>
