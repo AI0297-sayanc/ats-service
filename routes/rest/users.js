@@ -22,7 +22,7 @@ module.exports = {
    */
   async find(req, res) {
     try {
-      const users = await User.find({ _organization: req.user._organization }).select("-password -forgotpassword").exec()
+      const users = await User.find({ _organization: req.user._organization }).populate("_organization").select("-password -forgotpassword").exec()
       return res.json({ error: false, users })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
@@ -48,7 +48,7 @@ module.exports = {
    */
   async get(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.id, _organization: req.user._organization }).select("-password -forgotpassword").exec()
+      const user = await User.findOne({ _id: req.params.id, _organization: req.user._organization }).populate("_organization").select("-password -forgotpassword").exec()
       return res.json({ error: false, user })
     } catch (err) {
       return res.status(500).json({ error: true, reason: err.message })
