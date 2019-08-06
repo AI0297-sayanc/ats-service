@@ -34,6 +34,9 @@ module.exports = {
           skillsRequired(item) { return item.split("|").map(c => c.trim()) },
           tags(item) { return item.split("|").map(c => c.trim()) },
           locations(item) { return item.split("|").map(c => c.trim()) },
+          isActive(item) { return (typeof item === "boolean") ? item : (item === 1 || item.toLowerCase() === "true") },
+          isRemoteAllowed(item) { return (typeof item === "boolean") ? item : (item === 1 || item.toLowerCase() === "true") },
+          hideCompensationDetails(item) { return (typeof item === "boolean") ? item : (item === 1 || item.toLowerCase() === "true") },
         }
       }).fromFile(path)
 

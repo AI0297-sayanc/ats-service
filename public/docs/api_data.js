@@ -2117,6 +2117,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": true,
+            "field": "title",
+            "description": "<p>Opening title</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
             "field": "description",
             "description": "<p>Opening description</p>"
           },

@@ -69,7 +69,7 @@ module.exports = {
       const user = jwt.verify(token, process.env.SECRET)
       const candidates = await Candidate.find({ _opening: openingid, _organization: user._organization }).populate("_createdBy _skills _tags").exec()
       const csvString = await jsonExport(candidates.map(candidate => ({
-        name: candidate.name,
+        name: { first: candidate.name.first, last: candidate.name.last },
         email: candidate.email,
         altEmail: candidate.altEmail,
         phone: candidate.phone,

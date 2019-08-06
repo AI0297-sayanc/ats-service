@@ -122,6 +122,7 @@ module.exports = {
    *
    * @apiParam {String} id `URL Param` The _id of the Opening to edit
 
+   * @apiParam  {String} [title] Opening title
    * @apiParam  {String} [description] Opening description
    * @apiParam  {String[]} [workflowStages] Array of workflow stage Ids in desired order. Note that setting this field OVERWRITES existing array completely.
    * @apiParam  {String[]} [locations] Opening locations
@@ -157,7 +158,7 @@ module.exports = {
       if (opening === null) return res.status(400).json({ error: true, reason: "No such Opening for you!" })
       // if (String(opening._organization) !== String(req.user._organization)) return res.status(403).json({ error: true, reason: "Not your Opening!" })
 
-      // if (title !== undefined) opening.title = title
+      if (title !== undefined) opening.title = title
       if (description !== undefined) opening.description = description
       if (locations !== undefined) opening.locations = locations
       if (noOfOpenings !== undefined) opening.noOfOpenings = noOfOpenings
