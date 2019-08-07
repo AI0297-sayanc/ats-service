@@ -164,11 +164,11 @@ CandidateSchema.pre("save", async function (next) {
     if (this.decisionStatus === "rejected") {
       this.wasRejected = true // for usage in post hooks below
       this.rejectedAt = now
-      this.activities.push({ text: "Candidate Accepted", _workflowStage: this._currentWorkflowStage, when: Date.now() })
+      // this.activities.push({ text: "Candidate Rejected", _workflowStage: this._currentWorkflowStage, when: Date.now() })
     } else if (this.decisionStatus === "accepted") {
       this.wasAccepted = true // for usage in post hooks below
       this.acceptedAt = now
-      this.activities.push({ text: "Candidate Rejected", _workflowStage: this._currentWorkflowStage, when: Date.now() })
+      // this.activities.push({ text: "Candidate Accepted", _workflowStage: this._currentWorkflowStage, when: Date.now() })
     }
   }
   this.lastModifiedAt = now
