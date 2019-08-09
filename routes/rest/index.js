@@ -4,9 +4,9 @@ const router = express.Router()
 const expressJwt = require("express-jwt")
 const multer = require("multer")
 
-const config = require("../../config")[process.env.NODE_ENV || "development"]
+// const config = require("../../config")[process.env.NODE_ENV || "development"]
 
-const checkJwt = expressJwt({ secret: config.secret }) // the JWT auth check middleware
+const checkJwt = expressJwt({ secret: process.env.SECRET }) // the JWT auth check middleware
 const upload = multer({ dest: "/tmp/", limits: { fileSize: 5000000 } }) // max file size 5 MB
 
 const login = require("./auth")
